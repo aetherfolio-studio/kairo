@@ -8,25 +8,17 @@ import {
   Users,
   Calendar,
   Building2,
+  BedDouble,
   Receipt,
-  BarChart3,
-  UserCheck,
-  Package,
   Sparkles,
   ArrowRight,
+  Plus,
   X,
+  Stethoscope,
   Activity,
-  BedDouble
+  FileText,
+  Command
 } from 'lucide-react';
-
-interface PaletteItem {
-  label: string;
-  category: 'Navigation' | 'Patient' | 'Department' | 'Physician' | 'Action';
-  href?: string;
-  icon: any;
-  subtitle?: string;
-  onSelect?: () => void;
-}
 
 export function CommandPalette() {
   const router = useRouter();
@@ -34,138 +26,156 @@ export function CommandPalette() {
     isCommandPaletteOpen,
     setIsCommandPaletteOpen,
     patients,
-    departments,
     setSelectedPatient,
     setIsNewPatientOpen,
     setIsNewAppointmentOpen,
-    setIsBookDemoOpen
+    addToast
   } = useHospitalStore();
 
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [category, setCategory] = useState<'All' | 'Patients' | 'Actions' | 'Navigation'>('All');
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isCommandPaletteOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
-    } else {
-      setQuery('');
       setSelectedIndex(0);
+      setQuery('');
     }
   }, [isCommandPaletteOpen]);
 
-  const quickNav: PaletteItem[] = [
-    { label: 'Hospital Overview Dashboard', category: 'Navigation', href: '/app', icon: Activity, subtitle: 'Live admissions, metrics & schedule' },
-    { label: 'Patient Directory & Records', category: 'Navigation', href: '/app/patients', icon: Users, subtitle: 'Search medical histories' },
-    { label: 'Smart Appointment Scheduling', category: 'Navigation', href: '/app/appointments', icon: Calendar, subtitle: 'Day, week & month calendar' },
-    { label: 'Bed & Ward Occupancy', category: 'Navigation', href: '/app/beds', icon: BedDouble, subtitle: 'ICU, General, ER & Private capacity' },
-    { label: 'Department Clinical Operations', category: 'Navigation', href: '/app/departments', icon: Building2, subtitle: '8 specialized clinical units' },
-    { label: 'Billing & Invoices', category: 'Navigation', href: '/app/billing', icon: Receipt, subtitle: 'Revenue, claims & payments' },
-    { label: 'Hospital Analytics & Reports', category: 'Navigation', href: '/app/reports', icon: BarChart3, subtitle: 'Turnover & volume trends' },
-    { label: 'Kairo Intelligence AI', category: 'Navigation', href: '/app/ai', icon: Sparkles, subtitle: 'Operational bottleneck assistant' },
+  if (!isCommandPaletteOpen) return null;
+
+  const quickActions = [
     {
-      label: 'Admit New Patient (+)',
-      category: 'Action',
-      icon: Users,
-      subtitle: 'Open clinical intake form',
-      onSelect: () => {
+      id: 'act-admit',
+      title: 'Admit New Inpatient',
+      category: 'Actions',
+      sub: 'Register clinical intake & allocate ward bed',
+      icon: Plus,
+      action: () => {
         setIsCommandPaletteOpen(false);
         setIsNewPatientOpen(true);
       }
     },
     {
-      label: 'Schedule New Consultation (+)',
-      category: 'Action',
+      id: 'act-book',
+      title: 'Book Consultation / Surgery',
+      category: 'Actions',
+      sub: 'Add appointment to physician schedule',
       icon: Calendar,
-      subtitle: 'Book physician time slot',
-      onSelect: () => {
+      action: () => {
         setIsCommandPaletteOpen(false);
         setIsNewAppointmentOpen(true);
       }
     },
     {
-      label: 'Book Platform Demo Walkthrough',
-      category: 'Action',
+      id: 'act-ai',
+      title: 'Ask Kairo Intelligence Copilot',
+      category: 'Actions',
+      sub: 'Run hospital capacity & bottleneck prediction',
       icon: Sparkles,
-      subtitle: 'Schedule 30-min architect call',
-      onSelect: () => {
+      action: () => {
         setIsCommandPaletteOpen(false);
-        setIsBookDemoOpen(true);
+        router.push('/app/ai');
+      }
+    },
+    {
+      id: 'nav-overview',
+      title: 'Go to Command Center Overview',
+      category: 'Navigation',
+      sub: 'Live hospital telemetry & admissions',
+      icon: Activity,
+      action: () => {
+        setIsCommandPaletteOpen(false);
+        router.push('/app');
+      }
+    },
+    {
+      id: 'nav-patients',
+      title: 'Go to Patient Records Directory',
+      category: 'Navigation',
+      sub: 'Search 32 active admitted charts',
+      icon: Users,
+      action: () => {
+        setIsCommandPaletteOpen(false);
+        router.push('/app/patients');
+      }
+    },
+    {
+      id: 'nav-beds',
+      title: 'Go to Ward & Bed Capacity',
+      category: 'Navigation',
+      sub: 'ICU, General & Emergency telemetry',
+      icon: BedDouble,
+      action: () => {
+        setIsCommandPaletteOpen(false);
+        router.push('/app/beds');
+      }
+    },
+    {
+      id: 'nav-billing',
+      title: 'Go to Billing & Claims Ledger',
+      category: 'Navigation',
+      sub: 'ICD-10 coding & insurance reconciliations',
+      icon: Receipt,
+      action: () => {
+        setIsCommandPaletteOpen(false);
+        router.push('/app/billing');
       }
     }
   ];
 
-  const patientResults: PaletteItem[] = patients
-    .filter((p) => p.name.toLowerCase().includes(query.toLowerCase()) || p.patientId.toLowerCase().includes(query.toLowerCase()))
-    .map((p) => ({
-      label: p.name,
-      category: 'Patient',
-      icon: Users,
-      subtitle: `${p.patientId} • ${p.department} • ${p.status}`,
-      onSelect: () => {
-        setIsCommandPaletteOpen(false);
-        setSelectedPatient(p);
-      }
-    }));
-
-  const departmentResults: PaletteItem[] = departments
-    .filter((d) => d.name.toLowerCase().includes(query.toLowerCase()) || d.code.toLowerCase().includes(query.toLowerCase()))
-    .map((d) => ({
-      label: d.name,
-      category: 'Department',
-      href: `/app/departments`,
-      icon: Building2,
-      subtitle: `${d.code} • ${d.occupancyPercent}% Occupancy • Lead: ${d.headDoctor}`
-    }));
-
-  const combinedItems: PaletteItem[] = query.trim() === ''
-    ? quickNav
-    : [
-        ...quickNav.filter((n) => n.label.toLowerCase().includes(query.toLowerCase())),
-        ...patientResults,
-        ...departmentResults,
-      ];
-
-  const handleSelect = (item: PaletteItem) => {
-    if (item.onSelect) {
-      item.onSelect();
-    } else if (item.href) {
+  // Patients as items
+  const patientItems = patients.map((p) => ({
+    id: `pt-${p.id}`,
+    title: `${p.name} (${p.patientId})`,
+    category: 'Patients',
+    sub: `${p.department} • ${p.status} • Room: ${p.room || 'Outpatient'}`,
+    icon: Users,
+    action: () => {
       setIsCommandPaletteOpen(false);
-      router.push(item.href);
+      setSelectedPatient(p);
+      addToast({
+        title: `Opened Chart: ${p.name}`,
+        description: `EHR Record loaded with real-time bedside vitals.`,
+        type: 'info'
+      });
+    }
+  }));
+
+  const allItems = [...quickActions, ...patientItems];
+
+  const filteredItems = allItems.filter((item) => {
+    const matchesCat = category === 'All' || item.category === category;
+    const matchesSearch =
+      item.title.toLowerCase().includes(query.toLowerCase()) ||
+      item.sub.toLowerCase().includes(query.toLowerCase());
+    return matchesCat && matchesSearch;
+  });
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev + 1) % Math.max(1, filteredItems.length));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev - 1 + filteredItems.length) % Math.max(1, filteredItems.length));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (filteredItems[selectedIndex]) {
+        filteredItems[selectedIndex].action();
+      }
     }
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isCommandPaletteOpen) return;
-
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev + 1) % (combinedItems.length || 1));
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev - 1 + combinedItems.length) % (combinedItems.length || 1));
-      } else if (e.key === 'Enter' && combinedItems[selectedIndex]) {
-        e.preventDefault();
-        handleSelect(combinedItems[selectedIndex]);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isCommandPaletteOpen, selectedIndex, combinedItems]);
-
-  if (!isCommandPaletteOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in duration-150">
-      <div
-        className="w-full max-w-xl bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl shadow-warm-lg overflow-hidden flex flex-col animate-in zoom-in-95 duration-150"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Search Header */}
-        <div className="flex items-center px-4 py-3.5 border-b border-[#EFE5DC] gap-3">
-          <Search className="w-4 h-4 text-[#7A6258] shrink-0" />
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full max-w-2xl bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl shadow-warm-lg overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+        {/* Search input header */}
+        <div className="p-4 border-b border-[#EFE5DC] flex items-center gap-3">
+          <Search className="w-5 h-5 text-[#E06D53] shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -174,86 +184,92 @@ export function CommandPalette() {
               setQuery(e.target.value);
               setSelectedIndex(0);
             }}
-            placeholder="Search patients, doctors, departments, or jump to pages..."
-            className="w-full bg-transparent text-sm text-[#2C1810] placeholder-[#A59288] focus:outline-none"
+            onKeyDown={handleKeyDown}
+            placeholder="Type a command, patient name, doctor, or department..."
+            className="flex-1 bg-transparent text-sm text-[#2C1810] placeholder-[#A59288] focus:outline-none"
           />
           <button
             onClick={() => setIsCommandPaletteOpen(false)}
-            className="p-1 rounded-md text-[#7A6258] hover:text-[#2C1810] cursor-pointer"
+            className="p-1 text-[#7A6258] hover:text-[#2C1810] rounded-lg cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
+        {/* Categories Bar */}
+        <div className="flex items-center gap-2 px-4 py-2 bg-[#FAF6F2] border-b border-[#EFE5DC] overflow-x-auto text-xs">
+          {(['All', 'Actions', 'Patients', 'Navigation'] as const).map((cat) => (
+            <button
+              key={cat}
+              onClick={() => {
+                setCategory(cat);
+                setSelectedIndex(0);
+              }}
+              className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                category === cat
+                  ? 'bg-[#E06D53] text-white shadow-warm-sm'
+                  : 'text-[#7A6258] hover:text-[#2C1810]'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
         {/* Results List */}
-        <div className="max-h-80 overflow-y-auto p-2 flex flex-col gap-0.5">
-          {combinedItems.length === 0 ? (
-            <div className="p-8 text-center text-xs text-[#A59288]">
-              No hospital records found matching &quot;{query}&quot;
+        <div className="max-h-[380px] overflow-y-auto p-2 flex flex-col gap-1">
+          {filteredItems.length === 0 ? (
+            <div className="py-12 text-center text-xs text-[#A59288] flex flex-col items-center gap-2">
+              <Search className="w-6 h-6 text-[#E2D3C7]" />
+              <span>No commands or patient records found matching &quot;{query}&quot;.</span>
             </div>
           ) : (
-            combinedItems.map((item, idx) => {
+            filteredItems.map((item, idx) => {
               const Icon = item.icon;
-              const isSelected = idx === selectedIndex;
+              const isSelected = selectedIndex === idx;
               return (
-                <button
-                  key={idx}
-                  onClick={() => handleSelect(item)}
+                <div
+                  key={item.id}
+                  onClick={() => item.action()}
                   onMouseEnter={() => setSelectedIndex(idx)}
-                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs transition-colors text-left cursor-pointer ${
+                  className={`p-3 rounded-2xl flex items-center justify-between gap-3 cursor-pointer transition-all duration-150 ${
                     isSelected
-                      ? 'bg-[#E06D53] text-white font-medium shadow-warm-sm'
-                      : 'text-[#2C1810] hover:bg-[#F8F3ED]'
+                      ? 'bg-[#FDEEE9] text-[#E06D53] shadow-warm-sm translate-x-1'
+                      : 'hover:bg-[#FAF6F2] text-[#2C1810]'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <Icon
-                      className={`w-4 h-4 shrink-0 ${
-                        isSelected ? 'text-white' : 'text-[#E06D53]'
+                    <div
+                      className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+                        isSelected ? 'bg-white text-[#E06D53]' : 'bg-[#FAF6F2] text-[#7A6258]'
                       }`}
-                    />
+                    >
+                      <Icon className="w-4 h-4" />
+                    </div>
                     <div className="flex flex-col min-w-0">
-                      <span className="truncate">{item.label}</span>
-                      {item.subtitle && (
-                        <span
-                          className={`text-[10px] truncate ${
-                            isSelected ? 'text-[#FDEEE9]' : 'text-[#7A6258]'
-                          }`}
-                        >
-                          {item.subtitle}
-                        </span>
-                      )}
+                      <span className="text-xs font-bold truncate">{item.title}</span>
+                      <span className="text-[11px] text-[#7A6258] truncate">{item.sub}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <span
-                      className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
-                        isSelected
-                          ? 'bg-[#C54E35] text-white'
-                          : 'bg-[#FAF6F2] text-[#7A6258] border border-[#EFE5DC]'
-                      }`}
-                    >
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white border border-[#EFE5DC] text-[#7A6258]">
                       {item.category}
                     </span>
-                    <ArrowRight
-                      className={`w-3.5 h-3.5 ${
-                        isSelected ? 'text-white' : 'text-[#A59288]'
-                      }`}
-                    />
+                    <ArrowRight className={`w-3.5 h-3.5 ${isSelected ? 'text-[#E06D53]' : 'text-transparent'}`} />
                   </div>
-                </button>
+                </div>
               );
             })
           )}
         </div>
 
-        {/* Footer Shortcut Bar */}
-        <div className="px-4 py-2.5 bg-[#FAF6F2] border-t border-[#EFE5DC] flex items-center justify-between text-[11px] text-[#7A6258] font-mono">
+        {/* Footer shortcuts */}
+        <div className="p-3 bg-[#FAF6F2] border-t border-[#EFE5DC] flex items-center justify-between text-[11px] font-mono text-[#A59288] px-4">
           <div className="flex items-center gap-3">
             <span>↑↓ Navigate</span>
             <span>↵ Select</span>
-            <span>ESC Close</span>
+            <span>Esc Close</span>
           </div>
           <span>Kairo Hospital Spotlight</span>
         </div>

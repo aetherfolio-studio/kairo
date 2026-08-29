@@ -14,39 +14,77 @@ import {
   Phone,
   Mail,
   ShieldCheck,
-  CheckCircle2
+  CheckCircle2,
+  Copy,
+  Check,
+  SlidersHorizontal,
+  ArrowUpDown
 } from 'lucide-react';
 
 export default function PatientsPage() {
-  const { patients, setSelectedPatient, setIsNewPatientOpen } = useHospitalStore();
+  const { patients, setSelectedPatient, setIsNewPatientOpen, updatePatientStatus, addToast } = useHospitalStore();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'All' | 'Admitted' | 'Outpatient' | 'In Surgery' | 'Discharged'>('All');
   const [departmentFilter, setDepartmentFilter] = useState('All');
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<'name' | 'age' | 'status' | 'id'>('name');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
-  const filteredPatients = patients.filter((p) => {
-    const matchesSearch =
-      p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.patientId.toLowerCase().includes(search.toLowerCase()) ||
-      p.assignedDoctor.toLowerCase().includes(search.toLowerCase());
-    const matchesStatus = statusFilter === 'All' || p.status === statusFilter;
-    const matchesDept = departmentFilter === 'All' || p.department.includes(departmentFilter);
-    return matchesSearch && matchesStatus && matchesDept;
-  });
+  const handleCopyId = (e: React.MouseEvent, idText: string) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(idText);
+    setCopiedId(idText);
+    setTimeout(() => setCopiedId(null), 2000);
+    addToast({
+      title: 'Patient ID Copied',
+      description: `${idText} copied to clipboard for EHR export.`,
+      type: 'info'
+    });
+  };
+
+  const filteredPatients = patients
+    .filter((p) => {
+      const matchesSearch =
+        p.name.toLowerCase().includes(search.toLowerCase()) ||
+        p.patientId.toLowerCase().includes(search.toLowerCase()) ||
+        p.assignedDoctor.toLowerCase().includes(search.toLowerCase()) ||
+        p.department.toLowerCase().includes(search.toLowerCase());
+      const matchesStatus = statusFilter === 'All' || p.status === statusFilter;
+      const matchesDept = departmentFilter === 'All' || p.department.includes(departmentFilter);
+      return matchesSearch && matchesStatus && matchesDept;
+    })
+    .sort((a, b) => {
+      let comp = 0;
+      if (sortBy === 'name') comp = a.name.localeCompare(b.name);
+      else if (sortBy === 'age') comp = a.age - b.age;
+      else if (sortBy === 'status') comp = a.status.localeCompare(b.status);
+      else if (sortBy === 'id') comp = a.patientId.localeCompare(b.patientId);
+      return sortOrder === 'asc' ? comp : -comp;
+    });
+
+  const toggleSort = (field: 'name' | 'age' | 'status' | 'id') => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(field);
+      setSortOrder('asc');
+    }
+  };
 
   return (
     <div className="flex flex-col gap-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#2C1810]">Patient Directory & Records</h1>
+          <h1 className="text-2xl font-bold text-[#2C1810]">Patient Directory &amp; Health Records</h1>
           <p className="text-xs sm:text-sm text-[#7A6258]">
-            Search electronic health records, active admissions, bedside vitals, and physician notes.
+            Search electronic health records, active ward admissions, bedside telemetry, and physician notes.
           </p>
         </div>
 
         <button
           onClick={() => setIsNewPatientOpen(true)}
-          className="px-4 py-2 bg-[#E06D53] hover:bg-[#D25C42] text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-all shadow-terracotta cursor-pointer self-start sm:self-auto"
+          className="px-4 py-2 bg-[#E06D53] hover:bg-[#D25C42] text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-all shadow-terracotta cursor-pointer self-start sm:self-auto active:scale-95"
         >
           <Plus className="w-4 h-4" />
           <span>Admit Patient</span>
@@ -89,14 +127,38 @@ export default function PatientsPage() {
           <table className="w-full text-left border-collapse text-xs">
             <thead>
               <tr className="border-b border-[#EFE5DC] bg-[#FAF6F2] text-[#7A6258] font-mono text-[11px] uppercase">
-                <th className="py-3.5 px-4 font-semibold">Patient ID</th>
-                <th className="py-3.5 px-4 font-semibold">Name & Age</th>
+                <th
+                  onClick={() => toggleSort('id')}
+                  className="py-3.5 px-4 font-semibold cursor-pointer hover:text-[#2C1810]"
+                >
+                  <div className="flex items-center gap-1">
+                    <span>Patient ID</span>
+                    <ArrowUpDown className="w-3 h-3" />
+                  </div>
+                </th>
+                <th
+                  onClick={() => toggleSort('name')}
+                  className="py-3.5 px-4 font-semibold cursor-pointer hover:text-[#2C1810]"
+                >
+                  <div className="flex items-center gap-1">
+                    <span>Name &amp; Age</span>
+                    <ArrowUpDown className="w-3 h-3" />
+                  </div>
+                </th>
                 <th className="py-3.5 px-4 font-semibold">Department</th>
                 <th className="py-3.5 px-4 font-semibold">Assigned Doctor</th>
-                <th className="py-3.5 px-4 font-semibold">Status</th>
+                <th
+                  onClick={() => toggleSort('status')}
+                  className="py-3.5 px-4 font-semibold cursor-pointer hover:text-[#2C1810]"
+                >
+                  <div className="flex items-center gap-1">
+                    <span>Status</span>
+                    <ArrowUpDown className="w-3 h-3" />
+                  </div>
+                </th>
                 <th className="py-3.5 px-4 font-semibold">Bed / Room</th>
-                <th className="py-3.5 px-4 font-semibold">Last Activity</th>
-                <th className="py-3.5 px-4 font-semibold text-right">Action</th>
+                <th className="py-3.5 px-4 font-semibold">Bedside Vitals</th>
+                <th className="py-3.5 px-4 font-semibold text-right">Quick Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#EFE5DC]/60">
@@ -114,7 +176,18 @@ export default function PatientsPage() {
                     className="hover:bg-[#FAF6F2] transition-colors cursor-pointer group"
                   >
                     <td className="py-3 px-4 font-mono font-bold text-[#E06D53]">
-                      {patient.patientId}
+                      <button
+                        onClick={(e) => handleCopyId(e, patient.patientId)}
+                        className="inline-flex items-center gap-1 hover:underline cursor-pointer group/copy"
+                        title="Click to copy Patient ID"
+                      >
+                        <span>{patient.patientId}</span>
+                        {copiedId === patient.patientId ? (
+                          <Check className="w-3 h-3 text-emerald-600 animate-in zoom-in" />
+                        ) : (
+                          <Copy className="w-3 h-3 text-[#A59288] opacity-0 group-hover/copy:opacity-100 transition-opacity" />
+                        )}
+                      </button>
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex flex-col">
@@ -150,12 +223,17 @@ export default function PatientsPage() {
                     <td className="py-3 px-4 font-mono text-[#7A6258]">
                       {patient.room || '—'}
                     </td>
-                    <td className="py-3 px-4 font-mono text-[#A59288] text-[11px]">
-                      {patient.lastVisit}
+                    <td className="py-3 px-4 font-mono text-[11px] text-[#7A6258]">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[#2C1810] font-bold">{patient.vitals.heartRate}</span>
+                        <span>•</span>
+                        <span>{patient.vitals.bloodPressure}</span>
+                      </div>
                     </td>
                     <td className="py-3 px-4 text-right">
-                      <span className="text-xs font-semibold text-[#E06D53] hover:underline">
-                        View Chart →
+                      <span className="text-xs font-semibold text-[#E06D53] group-hover:underline flex items-center justify-end gap-1">
+                        <span>View Chart</span>
+                        <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </td>
                   </tr>

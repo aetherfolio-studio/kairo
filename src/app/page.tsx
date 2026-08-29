@@ -6,6 +6,9 @@ import { HeroDashboardPreview } from '@/components/HeroDashboardPreview';
 import { AllInOneFeatures } from '@/components/AllInOneFeatures';
 import { HospitalJourney } from '@/components/HospitalJourney';
 import { DepartmentShowcase } from '@/components/DepartmentShowcase';
+import { HospitalCalculator } from '@/components/HospitalCalculator';
+import { ClinicianPerspectives } from '@/components/ClinicianPerspectives';
+import { LiveTelemetryTicker } from '@/components/LiveTelemetryTicker';
 import { useHospitalStore } from '@/lib/store';
 import {
   ArrowRight,
@@ -17,7 +20,10 @@ import {
   Building2,
   Users,
   Play,
-  Heart
+  Heart,
+  SlidersHorizontal,
+  Clock,
+  BedDouble
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -34,10 +40,15 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col w-full bg-[#FBF8F5] text-[#2C1810] selection:bg-[#FDEEE9] selection:text-[#E06D53]">
+      {/* Real-time Hospital Operations Ticker */}
+      <div className="pt-16 sm:pt-20">
+        <LiveTelemetryTicker />
+      </div>
+
       {/* ====================================================
           1. HERO SECTION
           ==================================================== */}
-      <section className="relative pt-32 sm:pt-40 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center text-center gap-10 overflow-hidden">
+      <section className="relative pt-12 sm:pt-20 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center text-center gap-10 overflow-hidden">
         {/* Soft Ambient Glow (Safe Inline Radial Gradient) */}
         <div
           className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[350px] pointer-events-none rounded-full -z-10 opacity-70"
@@ -141,17 +152,27 @@ export default function HomePage() {
       <AllInOneFeatures />
 
       {/* ====================================================
-          4. CONNECTED HOSPITAL JOURNEY (7 STAGES)
+          4. INTERACTIVE HOSPITAL CAPACITY & ROI CALCULATOR
+          ==================================================== */}
+      <HospitalCalculator />
+
+      {/* ====================================================
+          5. CONNECTED HOSPITAL JOURNEY (7 STAGES)
           ==================================================== */}
       <HospitalJourney />
 
       {/* ====================================================
-          5. DEPARTMENT SHOWCASE (8 UNITS)
+          6. DEPARTMENT SHOWCASE (8 UNITS)
           ==================================================== */}
       <DepartmentShowcase />
 
       {/* ====================================================
-          6. BOTTOM CALL TO ACTION
+          7. CLINICIAN PERSPECTIVES & CASE TRANSFORMATIONS
+          ==================================================== */}
+      <ClinicianPerspectives />
+
+      {/* ====================================================
+          8. BOTTOM CALL TO ACTION
           ==================================================== */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         <div className="p-8 sm:p-16 rounded-3xl bg-gradient-to-br from-white via-[#FDEEE9]/60 to-white border border-[#EFE5DC] shadow-warm-lg flex flex-col items-center text-center gap-8">

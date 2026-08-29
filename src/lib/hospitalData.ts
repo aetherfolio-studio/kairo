@@ -1,4 +1,4 @@
-﻿export interface Patient {
+export interface Patient {
   id: string;
   patientId: string;
   name: string;
@@ -58,14 +58,17 @@ export interface WardCapacity {
   id: string;
   wardName: string;
   category: 'ICU' | 'General' | 'Private' | 'Emergency' | 'Maternity';
-  occupied: number;
   total: number;
+  occupied: number;
   available: number;
   reserved: number;
   percentage: number;
-  status: 'Optimal' | 'Near Capacity' | 'Critical';
   nurseInCharge: string;
+  status: 'Normal' | 'Optimal' | 'Near Capacity' | 'Critical';
 }
+
+export type Ward = WardCapacity;
+export type AIInsight = AiInsight;
 
 export interface Invoice {
   id: string;
