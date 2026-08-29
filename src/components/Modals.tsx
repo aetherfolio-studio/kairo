@@ -322,10 +322,21 @@ export function PatientRecordDrawer() {
    ==================================================== */
 export function NewPatientModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { addPatient } = useHospitalStore();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    age: number;
+    gender: 'Female' | 'Male' | 'Other';
+    bloodGroup: string;
+    department: string;
+    assignedDoctor: string;
+    phone: string;
+    email: string;
+    room: string;
+    notes: string;
+  }>({
     name: '',
     age: 45,
-    gender: 'Female' as const,
+    gender: 'Female',
     bloodGroup: 'O+',
     department: 'Cardiology',
     assignedDoctor: 'Dr. Sarah Chen',
