@@ -4,6 +4,10 @@ import React from 'react';
 import Link from 'next/link';
 import { HeroDashboardPreview } from '@/components/HeroDashboardPreview';
 import { AllInOneFeatures } from '@/components/AllInOneFeatures';
+import { HospitalDigitalTwin } from '@/components/HospitalDigitalTwin';
+import { SurgicalOrchestrator } from '@/components/SurgicalOrchestrator';
+import { HospitalNeuralGraph } from '@/components/HospitalNeuralGraph';
+import { CrisisSimulationSandbox } from '@/components/CrisisSimulationSandbox';
 import { HospitalJourney } from '@/components/HospitalJourney';
 import { DepartmentShowcase } from '@/components/DepartmentShowcase';
 import { HospitalCalculator } from '@/components/HospitalCalculator';
@@ -23,7 +27,9 @@ import {
   Heart,
   SlidersHorizontal,
   Clock,
-  BedDouble
+  BedDouble,
+  Zap,
+  Scissors
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -147,32 +153,52 @@ export default function HomePage() {
       </section>
 
       {/* ====================================================
-          3. ALL-IN-ONE HOSPITAL OS FEATURES (6 CARDS)
+          3. HOSPITAL DIGITAL TWIN & ISOMETRIC ARCHITECTURE
+          ==================================================== */}
+      <HospitalDigitalTwin />
+
+      {/* ====================================================
+          4. ALL-IN-ONE HOSPITAL OS FEATURES (6 CARDS)
           ==================================================== */}
       <AllInOneFeatures />
 
       {/* ====================================================
-          4. INTERACTIVE HOSPITAL CAPACITY & ROI CALCULATOR
+          5. SURGICAL SUITE ORCHESTRATOR & OPERATING THEATERS
+          ==================================================== */}
+      <SurgicalOrchestrator />
+
+      {/* ====================================================
+          6. NEURAL OPERATIONS GRAPH & CONNECTED NODES
+          ==================================================== */}
+      <HospitalNeuralGraph />
+
+      {/* ====================================================
+          7. CRITICAL CRISIS RESILIENCE SANDBOX
+          ==================================================== */}
+      <CrisisSimulationSandbox />
+
+      {/* ====================================================
+          8. INTERACTIVE HOSPITAL CAPACITY & ROI CALCULATOR
           ==================================================== */}
       <HospitalCalculator />
 
       {/* ====================================================
-          5. CONNECTED HOSPITAL JOURNEY (7 STAGES)
+          9. CONNECTED HOSPITAL JOURNEY (7 STAGES)
           ==================================================== */}
       <HospitalJourney />
 
       {/* ====================================================
-          6. DEPARTMENT SHOWCASE (8 UNITS)
+          10. DEPARTMENT SHOWCASE (8 UNITS)
           ==================================================== */}
       <DepartmentShowcase />
 
       {/* ====================================================
-          7. CLINICIAN PERSPECTIVES & CASE TRANSFORMATIONS
+          11. CLINICIAN PERSPECTIVES & CASE TRANSFORMATIONS
           ==================================================== */}
       <ClinicianPerspectives />
 
       {/* ====================================================
-          8. BOTTOM CALL TO ACTION
+          12. BOTTOM CALL TO ACTION
           ==================================================== */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         <div className="p-8 sm:p-16 rounded-3xl bg-gradient-to-br from-white via-[#FDEEE9]/60 to-white border border-[#EFE5DC] shadow-warm-lg flex flex-col items-center text-center gap-8">
