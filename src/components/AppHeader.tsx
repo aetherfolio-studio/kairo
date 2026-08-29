@@ -1,82 +1,108 @@
 ﻿'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useKairoStore } from '@/lib/store';
+import { useHospitalStore } from '@/lib/store';
 import {
+  Menu,
   Search,
   Bell,
-  Menu,
-  Sparkles,
-  Command,
-  HelpCircle,
-  Plus
+  Calendar,
+  Plus,
+  SlidersHorizontal,
+  ChevronRight,
+  UserCheck
 } from 'lucide-react';
 
 interface AppHeaderProps {
   onOpenMobileMenu: () => void;
-  onOpenNewTask: () => void;
+  onOpenNewPatient: () => void;
+  onOpenNewAppointment: () => void;
 }
 
-export function AppHeader({ onOpenMobileMenu, onOpenNewTask }: AppHeaderProps) {
+export function AppHeader({
+  onOpenMobileMenu,
+  onOpenNewPatient,
+  onOpenNewAppointment
+}: AppHeaderProps) {
   const pathname = usePathname();
-  const { setIsCommandPaletteOpen } = useKairoStore();
+  const { setIsCommandPaletteOpen } = useHospitalStore();
 
-  const getBreadcrumb = () => {
-    if (pathname === '/app') return 'Overview';
-    if (pathname.includes('/projects')) return 'Projects';
-    if (pathname.includes('/tasks')) return 'My Tasks';
-    if (pathname.includes('/automations')) return 'Automations';
-    if (pathname.includes('/ai')) return 'Ask Kairo AI';
-    if (pathname.includes('/team')) return 'Team Directory';
-    if (pathname.includes('/inbox')) return 'Inbox';
-    if (pathname.includes('/settings')) return 'Settings';
-    return 'Workspace';
+  const getPageTitle = () => {
+    if (pathname === '/app') return 'Overview Dashboard';
+    if (pathname.startsWith('/app/patients')) return 'Patient Management';
+    if (pathname.startsWith('/app/appointments')) return 'Appointment Scheduling';
+    if (pathname.startsWith('/app/departments')) return 'Clinical Departments';
+    if (pathname.startsWith('/app/beds')) return 'Bed & Capacity Management';
+    if (pathname.startsWith('/app/billing')) return 'Billing & Financial Ledger';
+    if (pathname.startsWith('/app/reports')) return 'Hospital Analytics & Reports';
+    if (pathname.startsWith('/app/staff')) return 'Clinical Staff Directory';
+    if (pathname.startsWith('/app/inventory')) return 'Pharmacy & Medical Inventory';
+    if (pathname.startsWith('/app/ai')) return 'Kairo Intelligence AI';
+    if (pathname.startsWith('/app/messages')) return 'Hospital Communication';
+    if (pathname.startsWith('/app/settings')) return 'Hospital Settings';
+    return 'Hospital OS';
   };
 
   return (
-    <header className="h-14 border-b border-white/10 bg-zinc-950/70 backdrop-blur-xl px-4 sm:px-6 flex items-center justify-between sticky top-0 z-20">
+    <header className="h-16 border-b border-[#EFE5DC] bg-[#FFFDFC]/80 backdrop-blur-xl px-4 sm:px-6 flex items-center justify-between shrink-0 sticky top-0 z-20">
       <div className="flex items-center gap-3">
         <button
           onClick={onOpenMobileMenu}
-          className="p-1.5 rounded-lg text-zinc-400 hover:text-white lg:hidden"
+          className="lg:hidden p-2 text-[#7A6258] hover:text-[#2C1810] rounded-xl border border-[#EFE5DC] bg-white shadow-warm-sm cursor-pointer"
         >
-          <Menu className="w-5 h-5" />
+          <Menu className="w-4 h-4" />
         </button>
 
-        <div className="flex items-center gap-2 text-xs font-medium">
-          <span className="text-zinc-500">Workspace</span>
-          <span className="text-zinc-600">/</span>
-          <span className="text-zinc-200 font-semibold">{getBreadcrumb()}</span>
+        <div className="flex items-center gap-2 text-xs">
+          <span className="text-[#A59288] font-mono hidden sm:inline">Hospital OS</span>
+          <ChevronRight className="w-3.5 h-3.5 text-[#E2D3C7] hidden sm:inline" />
+          <h1 className="text-sm sm:text-base font-bold text-[#2C1810]">
+            {getPageTitle()}
+          </h1>
         </div>
       </div>
 
       <div className="flex items-center gap-3">
+        {/* Search trigger */}
         <button
           onClick={() => setIsCommandPaletteOpen(true)}
-          className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-xs text-zinc-400 bg-zinc-900 border border-white/10 rounded-lg hover:border-white/20 transition-colors cursor-pointer"
+          className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-xs text-[#7A6258] hover:text-[#2C1810] bg-white border border-[#EFE5DC] rounded-xl transition-all shadow-warm-sm cursor-pointer"
+          title="Search hospital records (Cmd+K)"
         >
-          <Search className="w-3.5 h-3.5" />
+          <Search className="w-3.5 h-3.5 text-[#7A6258]" />
           <span>Quick search...</span>
-          <kbd className="text-[10px] font-mono px-1 py-0.5 bg-zinc-800 border border-white/10 rounded text-zinc-400">
+          <kbd className="text-[10px] font-mono px-1.5 py-0.5 bg-[#FAF6F2] border border-[#E2D3C7] rounded text-[#7A6258]">
             ⌘K
           </kbd>
         </button>
 
+        {/* Schedule Consultation action */}
         <button
-          onClick={onOpenNewTask}
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-semibold rounded-lg transition-all shadow-sm cursor-pointer"
+          onClick={onOpenNewAppointment}
+          className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-[#FAF6F2] text-[#2C1810] text-xs font-semibold border border-[#EFE5DC] shadow-warm-sm transition-all cursor-pointer"
         >
-          <Plus className="w-3.5 h-3.5" />
-          <span>New Task</span>
+          <Calendar className="w-3.5 h-3.5 text-[#E06D53]" />
+          <span>Book Appointment</span>
         </button>
 
-        <div className="flex items-center gap-2">
+        {/* Admit Patient action */}
+        <button
+          onClick={onOpenNewPatient}
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#E06D53] hover:bg-[#D25C42] text-white text-xs font-semibold shadow-terracotta transition-all cursor-pointer"
+        >
+          <Plus className="w-3.5 h-3.5" />
+          <span>Admit Patient</span>
+        </button>
+
+        {/* User Profile */}
+        <div className="flex items-center gap-2 pl-2 border-l border-[#EFE5DC]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
-            alt="Elena"
-            className="w-7 h-7 rounded-lg object-cover border border-white/10"
+            src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&auto=format&fit=crop&q=80"
+            alt="Dr. Sarah Chen"
+            className="w-8 h-8 rounded-full object-cover border border-[#E2D3C7]"
           />
         </div>
       </div>

@@ -1,59 +1,73 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+﻿import type { Metadata } from 'next';
+import { Plus_Jakarta_Sans, Newsreader } from 'next/font/google';
 import './globals.css';
-import { KairoStoreProvider } from '@/lib/store';
+import { HospitalStoreProvider } from '@/lib/store';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { CommandPalette } from '@/components/CommandPalette';
+import { BookDemoModal, PatientRecordDrawer } from '@/components/Modals';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const sansFont = Plus_Jakarta_Sans({
   subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const serifFont = Newsreader({
   subsets: ['latin'],
+  style: ['normal', 'italic'],
+  variable: '--font-serif',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: 'Kairo — AI Workspace for Modern Teams',
-    template: '%s | Kairo'
+  title: 'Kairo — Hospital operations, intelligently connected.',
+  description:
+    'Kairo unifies clinical, operational, and administrative workflows in one intelligent platform—empowering hospitals to deliver exceptional care every day.',
+  keywords: [
+    'Hospital OS',
+    'Healthcare Operations',
+    'Clinical Workflow Management',
+    'Hospital ERP',
+    'Patient Scheduling',
+    'Bed Management',
+    'Medical Inventory'
+  ],
+  authors: [{ name: 'Kairo Design & Engineering' }],
+  creator: 'Kairo Healthcare Systems',
+  publisher: 'Kairo Healthcare Systems',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
   },
-  description: 'Kairo is an intelligent workspace that brings projects, tasks, conversations and AI workflows together.',
-  keywords: ['AI workspace', 'project management', 'linear alternative', 'modern productivity', 'developer workflows'],
-  authors: [{ name: 'Kairo Team' }],
-  creator: 'Kairo Technologies',
-  metadataBase: new URL('https://kairo-workspace.vercel.app'),
   openGraph: {
-    title: 'Kairo — AI Workspace for Modern Teams',
-    description: 'Turn ideas into progress. An intelligent workspace that unifies projects, tasks, conversations, and ambient AI workflows.',
-    type: 'website',
+    title: 'Kairo — Hospital operations, intelligently connected.',
+    description:
+      'Intelligent care. Seamless operations. Better outcomes. Connected clinical and operational workspace for modern hospitals.',
+    url: 'https://kairo-hospital.vercel.app',
+    siteName: 'Kairo Hospital OS',
     locale: 'en_US',
-    siteName: 'Kairo'
+    type: 'website',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Kairo — AI Workspace for Modern Teams',
-    description: 'Turn ideas into progress. An intelligent workspace that unifies projects, tasks, conversations, and ambient AI workflows.'
-  }
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="en" className="dark antialiased h-full">
-      <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-100 selection:bg-blue-500/30 selection:text-blue-200">
-        <KairoStoreProvider>
+    <html lang="en" className={`${sansFont.variable} ${serifFont.variable}`}>
+      <body className="min-h-screen flex flex-col bg-[#FBF8F5] text-[#2C1810] selection:bg-[#FDEEE9] selection:text-[#E06D53]">
+        <HospitalStoreProvider>
           <Navbar />
-          <div className="flex-1 flex flex-col">{children}</div>
+          <main className="flex-1 w-full">{children}</main>
           <Footer />
           <CommandPalette />
-        </KairoStoreProvider>
+          <BookDemoModal />
+          <PatientRecordDrawer />
+        </HospitalStoreProvider>
       </body>
     </html>
   );

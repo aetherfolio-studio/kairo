@@ -1,10 +1,10 @@
 ﻿import { MetadataRoute } from 'next';
-import { ARTICLES } from '@/lib/mockData';
+import { RESOURCES_ARTICLES } from '@/lib/hospitalData';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://kairo-workspace.vercel.app';
+  const baseUrl = 'https://kairo-hospital.vercel.app';
 
-  const articleEntries: MetadataRoute.Sitemap = ARTICLES.map((article) => ({
+  const articleEntries: MetadataRoute.Sitemap = RESOURCES_ARTICLES.map((article) => ({
     url: `${baseUrl}/resources/${article.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',

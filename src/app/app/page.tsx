@@ -1,259 +1,303 @@
 ﻿'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { useKairoStore } from '@/lib/store';
+import { useHospitalStore } from '@/lib/store';
 import {
-  Sparkles,
-  FolderKanban,
-  CheckCircle2,
-  Circle,
-  Zap,
+  Calendar,
+  Users,
+  Receipt,
+  UserCheck,
   TrendingUp,
-  Clock,
+  TrendingDown,
+  Sparkles,
   ArrowRight,
+  Clock,
+  Building2,
+  AlertTriangle,
+  Activity,
+  BedDouble,
+  CheckCircle2,
   Plus
 } from 'lucide-react';
-import { NewTaskModal } from '@/components/Modals';
 
 export default function AppOverviewPage() {
-  const { tasks, projects, toggleTaskStatus, completedTasksCount, totalTasksCount } = useKairoStore();
-  const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
+  const {
+    patients,
+    appointments,
+    departments,
+    wards,
+    updateAppointmentStatus,
+    setSelectedPatient,
+    setIsNewPatientOpen,
+    setIsNewAppointmentOpen,
+    overallBedOccupancyPercent
+  } = useHospitalStore();
 
-  const activeProjects = projects.slice(0, 3);
-  const pendingTasks = tasks.filter((t) => t.status !== 'done').slice(0, 5);
-
-  const activities = [
-    { user: 'Marcus Chen', action: 'merged PR #142 into', target: 'kairo-web / main', time: '12m ago' },
-    { user: 'Elena Rostova', action: 'completed task', target: 'Design tokens WCAG AAA audit', time: '45m ago' },
-    { user: 'AI Context Agent', action: 'auto-summarized', target: 'Sprint 14 Planning Digest', time: '2h ago' },
-    { user: 'David Park', action: 'updated vector index latency spec on', target: 'AI Graph Engine', time: '4h ago' }
-  ];
+  const admittedPatients = patients.filter((p) => p.status === 'Admitted' || p.status === 'In Surgery');
 
   return (
     <div className="flex flex-col gap-8">
-      {/* 1. Welcome & Greeting Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-gradient-to-r from-zinc-900/90 via-zinc-900/60 to-zinc-950 border border-white/10 shadow-xl">
+      {/* 1. Top Greeting & Action Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-white border border-[#EFE5DC] shadow-warm-md">
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-bold text-zinc-100">
-              Good morning, Elena
+            <h1 className="text-xl sm:text-2xl font-bold text-[#2C1810]">
+              Good morning, Dr. Sarah
             </h1>
-            <span className="px-2 py-0.5 rounded-full bg-blue-900/40 text-blue-300 border border-blue-500/30 text-[10px] font-mono">
-              Sprint 14 Active
+            <span className="text-xl">👋</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-[#FDEEE9] text-[#E06D53] border border-[#F7D5CA] text-[10px] font-mono font-bold">
+              Level 1 Trauma Center
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-zinc-400">
-            You have <strong className="text-zinc-200">{pendingTasks.length} high-priority tasks</strong> due this week across 3 active projects.
+          <p className="text-xs sm:text-sm text-[#7A6258]">
+            Here&apos;s the live operational status for CityCare Hospital. <strong className="text-[#2C1810]">{admittedPatients.length} patients currently admitted</strong> across 8 clinical wards.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Link
-            href="/app/ai"
-            className="px-4 py-2 rounded-xl bg-blue-600/20 text-blue-300 hover:bg-blue-600/30 border border-blue-500/30 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-            <span>Ask Kairo AI</span>
-          </Link>
+        <div className="flex items-center gap-2.5">
           <button
-            onClick={() => setIsNewTaskOpen(true)}
-            className="px-4 py-2 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+            onClick={() => setIsNewAppointmentOpen(true)}
+            className="px-4 py-2 rounded-xl bg-white hover:bg-[#FAF6F2] text-[#2C1810] text-xs font-semibold border border-[#EFE5DC] shadow-warm-sm transition-all cursor-pointer flex items-center gap-1.5"
+          >
+            <Calendar className="w-3.5 h-3.5 text-[#E06D53]" />
+            <span>Book Consultation</span>
+          </button>
+          <button
+            onClick={() => setIsNewPatientOpen(true)}
+            className="px-4 py-2 rounded-xl bg-[#E06D53] hover:bg-[#D25C42] text-white text-xs font-semibold shadow-terracotta transition-all cursor-pointer flex items-center gap-1.5"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Create Task</span>
+            <span>Admit Patient</span>
           </button>
         </div>
       </div>
 
-      {/* 2. Key Productivity Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl bg-zinc-900/60 border border-white/10 flex flex-col gap-2">
-          <div className="flex items-center justify-between text-xs text-zinc-400 font-medium">
-            <span>Tasks Completed</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+      {/* 2. Key Operational Metrics Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Appointments Today */}
+        <div className="p-5 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-[#7A6258]">Appointments Today</span>
+            <div className="w-8 h-8 rounded-xl bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
+              <Calendar className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-bold text-zinc-100">
-            {completedTasksCount} <span className="text-xs font-normal text-zinc-500">/ {totalTasksCount}</span>
-          </div>
-          <div className="w-full h-1.5 rounded-full bg-zinc-800 overflow-hidden">
-            <div
-              className="h-full bg-emerald-500 rounded-full transition-all duration-500"
-              style={{ width: `${Math.round((completedTasksCount / (totalTasksCount || 1)) * 100)}%` }}
-            ></div>
+          <span className="text-3xl font-bold text-[#2C1810]">128</span>
+          <div className="flex items-center gap-1 text-xs text-emerald-600 font-medium font-mono">
+            <TrendingUp className="w-3.5 h-3.5" />
+            <span>↑ 12% vs yesterday</span>
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-zinc-900/60 border border-white/10 flex flex-col gap-2">
-          <div className="flex items-center justify-between text-xs text-zinc-400 font-medium">
-            <span>Sprint Velocity</span>
-            <TrendingUp className="w-4 h-4 text-blue-400" />
+        {/* Patients Admitted */}
+        <div className="p-5 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-[#7A6258]">Patients Admitted</span>
+            <div className="w-8 h-8 rounded-xl bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
+              <Users className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-bold text-zinc-100">92.4%</div>
-          <span className="text-[11px] text-emerald-400 font-mono">+8.1% vs previous sprint</span>
+          <span className="text-3xl font-bold text-[#2C1810]">{admittedPatients.length}</span>
+          <div className="flex items-center gap-1 text-xs text-emerald-600 font-medium font-mono">
+            <TrendingUp className="w-3.5 h-3.5" />
+            <span>↑ 8% vs yesterday</span>
+          </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-zinc-900/60 border border-white/10 flex flex-col gap-2">
-          <div className="flex items-center justify-between text-xs text-zinc-400 font-medium">
-            <span>Active Projects</span>
-            <FolderKanban className="w-4 h-4 text-indigo-400" />
+        {/* Total Revenue */}
+        <div className="p-5 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-[#7A6258]">Total Revenue</span>
+            <div className="w-8 h-8 rounded-xl bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
+              <Receipt className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-bold text-zinc-100">{projects.length}</div>
-          <span className="text-[11px] text-zinc-400 font-mono">4 departments linked</span>
+          <span className="text-3xl font-bold text-[#2C1810]">$24,560</span>
+          <div className="flex items-center gap-1 text-xs text-emerald-600 font-medium font-mono">
+            <TrendingUp className="w-3.5 h-3.5" />
+            <span>↑ 15% vs yesterday</span>
+          </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-zinc-900/60 border border-white/10 flex flex-col gap-2">
-          <div className="flex items-center justify-between text-xs text-zinc-400 font-medium">
-            <span>Autonomous Rules</span>
-            <Zap className="w-4 h-4 text-amber-400" />
+        {/* Discharges */}
+        <div className="p-5 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-[#7A6258]">Discharges</span>
+            <div className="w-8 h-8 rounded-xl bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
+              <UserCheck className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-bold text-zinc-100">4 Active</div>
-          <span className="text-[11px] text-amber-400 font-mono">142 automated actions</span>
+          <span className="text-3xl font-bold text-[#2C1810]">18</span>
+          <div className="flex items-center gap-1 text-xs text-rose-500 font-medium font-mono">
+            <TrendingDown className="w-3.5 h-3.5" />
+            <span>↓ 5% vs yesterday</span>
+          </div>
         </div>
       </div>
 
       {/* 3. Main Dashboard 2-Column Split */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Left Column: Today's High-Priority Deliverables */}
+        {/* Left Column: Today's Clinical Schedule */}
         <div className="lg:col-span-7 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-semibold text-zinc-100">Today&apos;s Focus Tasks</h2>
-              <span className="text-xs font-mono text-zinc-500">({pendingTasks.length} remaining)</span>
+              <h2 className="text-base font-bold text-[#2C1810]">Today&apos;s Schedule</h2>
+              <span className="text-xs font-mono text-[#7A6258]">({appointments.length} Consultations)</span>
             </div>
             <Link
-              href="/app/tasks"
-              className="text-xs text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1"
+              href="/app/appointments"
+              className="text-xs text-[#E06D53] hover:text-[#C54E35] font-semibold flex items-center gap-1"
             >
-              View all tasks →
+              <span>Full calendar</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
           <div className="flex flex-col gap-2.5">
-            {pendingTasks.length === 0 ? (
-              <div className="p-8 rounded-2xl bg-zinc-900/30 border border-white/5 text-center flex flex-col items-center gap-2">
-                <CheckCircle2 className="w-8 h-8 text-emerald-400" />
-                <p className="text-sm text-zinc-300 font-medium">All tasks completed for today!</p>
-                <p className="text-xs text-zinc-500">Enjoy the calm or create new sprint deliverables.</p>
-              </div>
-            ) : (
-              pendingTasks.map((task) => (
-                <div
-                  key={task.id}
-                  onClick={() => toggleTaskStatus(task.id)}
-                  className="p-3.5 rounded-2xl bg-zinc-900/70 hover:bg-zinc-900 border border-white/10 hover:border-white/20 transition-all flex items-center justify-between gap-4 cursor-pointer group"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <Circle className="w-4 h-4 text-zinc-500 group-hover:text-emerald-400 shrink-0 transition-colors" />
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-xs font-medium text-zinc-200 truncate group-hover:text-white">
-                        {task.title}
-                      </span>
-                      <span className="text-[10px] text-zinc-500 truncate">
-                        {task.projectName} • Due {task.dueDate}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 shrink-0">
-                    {task.aiGenerated && (
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950/60 text-blue-300 border border-blue-500/20">
-                        AI Generated
-                      </span>
-                    )}
-                    <span
-                      className={`text-[10px] font-mono px-2 py-0.5 rounded uppercase ${
-                        task.priority === 'urgent'
-                          ? 'bg-red-950/60 text-red-300 border border-red-500/30'
-                          : task.priority === 'high'
-                          ? 'bg-amber-950/60 text-amber-300 border border-amber-500/30'
-                          : 'bg-zinc-800 text-zinc-400'
-                      }`}
-                    >
-                      {task.priority}
+            {appointments.map((apt) => (
+              <div
+                key={apt.id}
+                onClick={() => {
+                  const foundPatient = patients.find((p) => p.name === apt.patientName);
+                  if (foundPatient) setSelectedPatient(foundPatient);
+                }}
+                className="p-3.5 rounded-2xl bg-white border border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm flex items-center justify-between gap-4 transition-all cursor-pointer group"
+              >
+                <div className="flex items-center gap-3.5 min-w-0">
+                  <span className="text-xs font-mono font-bold text-[#2C1810] shrink-0">{apt.time}</span>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-xs sm:text-sm font-semibold text-[#2C1810] group-hover:text-[#E06D53] truncate transition-colors">
+                      {apt.patientName}
+                    </span>
+                    <span className="text-[11px] text-[#7A6258] truncate">
+                      {apt.department} • {apt.doctor} • {apt.room}
                     </span>
                   </div>
                 </div>
-              ))
-            )}
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      updateAppointmentStatus(
+                        apt.id,
+                        apt.status === 'Confirmed' ? 'Completed' : 'Confirmed'
+                      );
+                    }}
+                    className={`text-[10px] font-mono font-semibold px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
+                      apt.status === 'Confirmed'
+                        ? 'bg-[#E8F8F0] text-[#065F46] border-[#A7F3D0]'
+                        : apt.status === 'Completed'
+                        ? 'bg-[#EEF2FF] text-[#3730A3] border-[#C7D2FE]'
+                        : 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A]'
+                    }`}
+                  >
+                    {apt.status}
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
 
-          {/* AI Workload Insight Card */}
-          <div className="p-4 rounded-2xl bg-blue-950/20 border border-blue-500/30 flex items-start gap-3 mt-2">
-            <div className="w-8 h-8 rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center shrink-0">
-              <Sparkles className="w-4 h-4 text-blue-400" />
+          {/* AI Operational Insight Callout */}
+          <div className="p-4 rounded-2xl bg-[#FDEEE9] border border-[#F7D5CA] flex items-start gap-3 mt-2 shadow-warm-sm">
+            <div className="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-[#E06D53] shrink-0 shadow-warm-sm">
+              <Sparkles className="w-4 h-4" />
             </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-xs font-semibold text-blue-300 font-mono">
-                AI Capacity Recommendation
+            <div className="flex flex-col gap-0.5">
+              <span className="text-xs font-bold text-[#E06D53] font-mono uppercase">
+                AI Operational Insight
               </span>
-              <p className="text-xs text-zinc-300 leading-relaxed">
-                David Park delivered 3 AI query tasks early. Recommending shifting the mobile gesture audit to Marcus to maintain sprint balance.
+              <p className="text-xs text-[#2C1810] leading-relaxed">
+                High patient influx predicted for tomorrow in Emergency. Historical weekend correlation suggests pre-allocating 4 swing beds in Ward 2A.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Active Roadmaps & Activity */}
+        {/* Right Column: Hospital Overview & Bed Capacity */}
         <div className="lg:col-span-5 flex flex-col gap-6">
-          <div className="flex flex-col gap-3">
+          {/* Hospital Overview Volume Chart */}
+          <div className="p-5 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-base font-semibold text-zinc-100">Active Roadmaps</h2>
-              <Link href="/app/projects" className="text-xs text-blue-400 hover:text-blue-300 font-medium">
-                All projects →
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#2C1810]">Hospital Admissions Trend</h3>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[#FAF6F2] text-[#7A6258] border border-[#EFE5DC]">
+                This Week
+              </span>
+            </div>
+
+            <div className="h-28 w-full relative flex items-center justify-center pt-2">
+              <svg viewBox="0 0 300 90" className="w-full h-full overflow-visible">
+                <defs>
+                  <linearGradient id="appChartGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#E06D53" stopOpacity="0.3" />
+                    <stop offset="100%" stopColor="#E06D53" stopOpacity="0.0" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M 10 70 Q 50 20, 90 55 T 170 40 T 230 60 T 290 20 L 290 85 L 10 85 Z"
+                  fill="url(#appChartGradient)"
+                />
+                <path
+                  d="M 10 70 Q 50 20, 90 55 T 170 40 T 230 60 T 290 20"
+                  fill="none"
+                  stroke="#E06D53"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <circle cx="290" cy="20" r="5" fill="#E06D53" />
+                <circle cx="290" cy="20" r="9" fill="#E06D53" fillOpacity="0.3" className="animate-ping" />
+              </svg>
+            </div>
+
+            <div className="flex justify-between text-[10px] font-mono text-[#A59288] px-1 border-t border-[#EFE5DC] pt-2">
+              <span>Mon (98)</span>
+              <span>Tue (112)</span>
+              <span>Wed (105)</span>
+              <span>Thu (120)</span>
+              <span>Fri (118)</span>
+              <span>Sat (94)</span>
+              <span className="font-bold text-[#E06D53]">Sun (128)</span>
+            </div>
+          </div>
+
+          {/* Ward Bed Capacities */}
+          <div className="p-5 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#2C1810]">Ward Bed Occupancy</h3>
+              <Link href="/app/beds" className="text-xs text-[#E06D53] hover:underline font-semibold">
+                Manage beds →
               </Link>
             </div>
 
             <div className="flex flex-col gap-3">
-              {activeProjects.map((project) => (
-                <Link
-                  key={project.id}
-                  href={`/app/projects/${project.id}`}
-                  className="p-4 rounded-2xl bg-zinc-900/70 hover:bg-zinc-900 border border-white/10 hover:border-white/20 transition-all flex flex-col gap-3 group"
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex flex-col">
-                      <h4 className="text-xs font-semibold text-zinc-100 group-hover:text-blue-400 transition-colors">
-                        {project.name}
-                      </h4>
-                      <span className="text-[10px] text-zinc-500 font-mono">{project.category} • Target {project.dueDate}</span>
-                    </div>
-                    <span className="text-xs font-mono font-bold text-zinc-300">
-                      {project.progress}%
+              {wards.map((ward) => (
+                <div key={ward.id} className="flex flex-col gap-1 text-xs">
+                  <div className="flex justify-between font-medium">
+                    <span className="text-[#2C1810] font-semibold">{ward.wardName}</span>
+                    <span className="font-mono text-[#7A6258]">
+                      {ward.occupied} / {ward.total} ({ward.percentage}%)
                     </span>
                   </div>
-
-                  <div className="w-full h-1.5 rounded-full bg-zinc-800 overflow-hidden">
+                  <div className="w-full h-2 rounded-full bg-[#FAF6F2] overflow-hidden">
                     <div
-                      className="h-full bg-indigo-500 rounded-full transition-all duration-300"
-                      style={{ width: `${project.progress}%` }}
+                      className={`h-full rounded-full transition-all duration-300 ${
+                        ward.percentage >= 90
+                          ? 'bg-[#EF4444]'
+                          : ward.percentage >= 80
+                          ? 'bg-[#F59E0B]'
+                          : 'bg-[#E06D53]'
+                      }`}
+                      style={{ width: `${ward.percentage}%` }}
                     ></div>
                   </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Activity Stream */}
-          <div className="flex flex-col gap-3">
-            <h2 className="text-base font-semibold text-zinc-100">Live Team Stream</h2>
-            <div className="flex flex-col gap-2.5 p-4 rounded-2xl bg-zinc-900/40 border border-white/5">
-              {activities.map((act, idx) => (
-                <div key={idx} className="flex items-start gap-2.5 text-xs text-zinc-400">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 mt-1.5"></span>
-                  <p className="leading-relaxed">
-                    <strong className="text-zinc-200">{act.user}</strong> {act.action}{' '}
-                    <span className="text-zinc-300 font-mono">{act.target}</span>
-                  </p>
-                  <span className="ml-auto text-[10px] text-zinc-500 shrink-0 font-mono">{act.time}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
-
-      <NewTaskModal isOpen={isNewTaskOpen} onClose={() => setIsNewTaskOpen(false)} />
     </div>
   );
 }

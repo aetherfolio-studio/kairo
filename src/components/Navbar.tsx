@@ -4,18 +4,18 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from './Logo';
-import { useKairoStore } from '@/lib/store';
-import { Search, Menu, X, ArrowRight, LayoutDashboard } from 'lucide-react';
+import { useHospitalStore } from '@/lib/store';
+import { Search, Menu, X, ArrowRight, Activity, Calendar, ShieldCheck, ChevronDown } from 'lucide-react';
 
 export function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { setIsCommandPaletteOpen } = useKairoStore();
+  const { setIsCommandPaletteOpen, setIsBookDemoOpen } = useHospitalStore();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 15);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -25,43 +25,42 @@ export function Navbar() {
     setMobileMenuOpen(false);
   }, [pathname]);
 
+  const isAppRoute = pathname.startsWith('/app');
+  if (isAppRoute) return null;
+
   const navLinks = [
-    { name: 'Product', href: '/#product' },
+    { name: 'Platform', href: '/#platform' },
+    { name: 'Departments', href: '/#departments' },
     { name: 'Solutions', href: '/solutions' },
     { name: 'Resources', href: '/resources' },
     { name: 'Pricing', href: '/pricing' },
     { name: 'About', href: '/about' },
   ];
 
-  const isAppRoute = pathname.startsWith('/app');
-
-  if (isAppRoute) {
-    return null;
-  }
-
   return (
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
-            ? 'bg-zinc-950/80 backdrop-blur-xl border-b border-white/[0.08] py-3 shadow-[0_4px_30px_rgba(0,0,0,0.5)]'
+            ? 'bg-[#FBF8F5]/90 backdrop-blur-xl border-b border-[#EFE5DC] py-3.5 shadow-warm-sm'
             : 'bg-transparent py-5'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <Logo size="md" />
 
-          <nav className="hidden md:flex items-center gap-1 bg-zinc-900/60 border border-white/[0.08] px-3 py-1.5 rounded-full backdrop-blur-md shadow-inner">
+          {/* Desktop Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-1 bg-[#FFFFFF]/70 border border-[#EFE5DC] px-4 py-1.5 rounded-full backdrop-blur-md shadow-warm-sm">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-3.5 py-1 text-xs font-medium rounded-full transition-all duration-200 ${
+                  className={`px-3.5 py-1 text-xs font-medium rounded-full transition-all duration-150 ${
                     isActive
-                      ? 'text-white bg-white/10 shadow-sm'
-                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
+                      ? 'text-[#E06D53] bg-[#FDEEE9] font-semibold'
+                      : 'text-[#7A6258] hover:text-[#2C1810] hover:bg-[#F6EFE9]'
                   }`}
                 >
                   {link.name}
@@ -70,46 +69,48 @@ export function Navbar() {
             })}
           </nav>
 
-          <div className="hidden md:flex items-center gap-3">
+          {/* Right Action Tools */}
+          <div className="hidden sm:flex items-center gap-3">
             <button
               onClick={() => setIsCommandPaletteOpen(true)}
-              className="inline-flex items-center gap-2 px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200 bg-zinc-900/60 hover:bg-zinc-900 border border-white/[0.08] rounded-lg transition-all cursor-pointer"
-              title="Search workspace (Cmd+K)"
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-xs text-[#7A6258] hover:text-[#2C1810] bg-[#FFFFFF] hover:bg-[#F6EFE9] border border-[#EFE5DC] rounded-xl transition-all shadow-warm-sm cursor-pointer"
+              title="Search hospital records (Cmd+K)"
             >
-              <Search className="w-3.5 h-3.5 text-zinc-400" />
+              <Search className="w-3.5 h-3.5 text-[#7A6258]" />
               <span>Search</span>
-              <kbd className="text-[10px] font-mono px-1.5 py-0.5 bg-zinc-800 border border-white/10 rounded text-zinc-400">
+              <kbd className="text-[10px] font-mono px-1.5 py-0.5 bg-[#F6EFE9] border border-[#E2D3C7] rounded text-[#7A6258]">
                 ⌘K
               </kbd>
             </button>
 
             <Link
               href="/app"
-              className="text-xs font-medium text-zinc-300 hover:text-white px-3 py-1.5 transition-colors"
+              className="text-xs font-semibold text-[#7A6258] hover:text-[#2C1810] px-3 py-1.5 transition-colors"
             >
               Log in
             </Link>
 
-            <Link
-              href="/app"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-950 bg-zinc-100 hover:bg-white px-4 py-2 rounded-full transition-all duration-200 shadow-sm hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 active:translate-y-0"
+            <button
+              onClick={() => setIsBookDemoOpen(true)}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-[#E06D53] hover:bg-[#D25C42] px-4 py-2 rounded-full transition-all duration-200 shadow-terracotta hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             >
-              <span>Get started</span>
+              <span>Book a Demo</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            </button>
           </div>
 
-          <div className="flex md:hidden items-center gap-2">
+          {/* Mobile Menu Button */}
+          <div className="flex sm:hidden items-center gap-2">
             <button
               onClick={() => setIsCommandPaletteOpen(true)}
-              className="p-2 text-zinc-400 hover:text-white bg-zinc-900/80 border border-white/10 rounded-lg"
+              className="p-2 text-[#7A6258] hover:text-[#2C1810] bg-white border border-[#EFE5DC] rounded-xl shadow-warm-sm"
               aria-label="Search"
             >
               <Search className="w-4 h-4" />
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-zinc-400 hover:text-white bg-zinc-900/80 border border-white/10 rounded-lg focus:outline-none"
+              className="p-2 text-[#7A6258] hover:text-[#2C1810] bg-white border border-[#EFE5DC] rounded-xl shadow-warm-sm"
               aria-label="Toggle Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -118,45 +119,53 @@ export function Navbar() {
         </div>
       </header>
 
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden bg-black/80 backdrop-blur-2xl flex flex-col pt-20 px-6 pb-8 animate-in fade-in duration-200">
-          <div className="flex justify-between items-center pb-6 border-b border-white/10">
-            <Logo size="md" />
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2 text-zinc-400 hover:text-white"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-
-          <nav className="flex flex-col gap-4 py-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-lg font-medium text-zinc-300 hover:text-white transition-colors"
+        <div className="fixed inset-0 z-50 sm:hidden bg-[#2C1810]/40 backdrop-blur-md flex flex-col pt-20 px-6 pb-8 animate-in fade-in duration-150">
+          <div className="w-full bg-[#FBF8F5] rounded-3xl p-6 border border-[#EFE5DC] shadow-warm-lg flex flex-col gap-6">
+            <div className="flex justify-between items-center pb-4 border-b border-[#EFE5DC]">
+              <Logo size="md" />
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-1.5 text-[#7A6258] hover:text-[#2C1810] rounded-lg"
               >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-          <div className="mt-auto flex flex-col gap-3 pt-6 border-t border-white/10">
-            <Link
-              href="/app"
-              className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold rounded-xl bg-zinc-900 text-zinc-200 border border-white/10"
-            >
-              <LayoutDashboard className="w-4 h-4" />
-              <span>Open Workspace</span>
-            </Link>
-            <Link
-              href="/app"
-              className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold rounded-xl bg-white text-zinc-950"
-            >
-              <span>Get started free</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <nav className="flex flex-col gap-3">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-base font-semibold text-[#2C1810] hover:text-[#E06D53] py-1 transition-colors"
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </nav>
+
+            <div className="flex flex-col gap-3 pt-4 border-t border-[#EFE5DC]">
+              <Link
+                href="/app"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold rounded-full bg-white text-[#2C1810] border border-[#EFE5DC] shadow-warm-sm"
+              >
+                <Activity className="w-4 h-4 text-[#E06D53]" />
+                <span>Open Live Hospital OS</span>
+              </Link>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setIsBookDemoOpen(true);
+                }}
+                className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold rounded-full bg-[#E06D53] text-white shadow-terracotta"
+              >
+                <span>Book a Hospital Demo</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
       )}
