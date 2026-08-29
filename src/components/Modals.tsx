@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { useHospitalStore } from '@/lib/store';
@@ -414,7 +414,7 @@ export function NewPatientModal({ isOpen, onClose }: { isOpen: boolean; onClose:
                 />
                 <select
                   value={formData.gender}
-                  onChange={(e) => setFormData({ ...formData, gender: e.target.value as any })}
+                  onChange={(e) => setFormData({ ...formData, gender: e.target.value as 'Female' | 'Male' | 'Other' })}
                   className="bg-white border border-[#EFE5DC] rounded-xl px-2 py-2 text-xs text-[#2C1810] focus:outline-none"
                 >
                   <option>Female</option>
@@ -583,7 +583,7 @@ export function NewAppointmentModal({ isOpen, onClose }: { isOpen: boolean; onCl
               <label className="text-xs font-semibold text-[#2C1810]">Visit Type</label>
               <select
                 value={type}
-                onChange={(e) => setType(e.target.value as any)}
+                onChange={(e) => setType(e.target.value as 'Consultation' | 'Follow-up' | 'Checkup' | 'Diagnostic')}
                 className="bg-white border border-[#EFE5DC] rounded-xl px-3.5 py-2 text-xs text-[#2C1810] focus:outline-none"
               >
                 <option>Consultation</option>

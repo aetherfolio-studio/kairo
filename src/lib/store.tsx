@@ -95,17 +95,19 @@ export function HospitalStoreProvider({ children }: { children: React.ReactNode 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   const addToast = ({ title, description, type = 'success' }: Omit<ToastMessage, 'id' | 'timestamp'>) => {
+    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const toastId = 'toast-' + Date.now();
     const newToast: ToastMessage = {
-      id: 'toast-' + Math.random().toString(36).substring(2, 9),
+      id: toastId,
       title,
       description,
       type,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+      timestamp
     };
     setToasts((prev) => [newToast, ...prev.slice(0, 4)]);
 
     setTimeout(() => {
-      removeToast(newToast.id);
+      removeToast(toastId);
     }, 4500);
   };
 
