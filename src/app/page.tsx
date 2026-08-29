@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -55,12 +55,12 @@ export default function HomePage() {
           1. HERO SECTION
           ==================================================== */}
       <section className="relative pt-12 sm:pt-20 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center text-center gap-10 overflow-hidden">
-        {/* Soft Ambient Glow (Safe Inline Radial Gradient) */}
+        {/* Soft Ambient Glow (Optimized Hardware Composite) */}
         <div
-          className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[350px] pointer-events-none rounded-full -z-10 opacity-70"
+          className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none rounded-full -z-10 opacity-70"
           style={{
-            background: 'radial-gradient(circle, #FDEEE9 0%, rgba(250, 212, 192, 0.4) 50%, transparent 70%)',
-            filter: 'blur(50px)'
+            background: 'radial-gradient(ellipse at center, rgba(253, 238, 233, 0.9) 0%, rgba(250, 212, 192, 0.35) 50%, transparent 75%)',
+            contain: 'paint'
           }}
         />
 
