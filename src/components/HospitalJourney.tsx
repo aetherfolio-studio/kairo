@@ -73,7 +73,7 @@ export function HospitalJourney() {
     <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col gap-16">
       {/* Section Header */}
       <div className="flex flex-col items-center text-center gap-4 max-w-3xl mx-auto">
-        <span className="text-xs font-mono uppercase tracking-widest text-[#E06D53] font-bold px-3.5 py-1 rounded-full bg-[#FDEEE9] border border-[#F7D5CA]">
+        <span className="text-xs font-mono uppercase tracking-widest text-[#E06D53] font-bold px-3.5 py-1 rounded-full bg-[#FDEEE9] border border-[#F7D5CA] shimmer-badge">
           OPERATIONAL LIFECYCLE
         </span>
         <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#2C1810]">
@@ -93,20 +93,20 @@ export function HospitalJourney() {
             <div
               key={step.num}
               onClick={() => setActiveStep(idx)}
-              className={`p-4 rounded-2xl border transition-all duration-200 flex flex-col justify-between gap-4 cursor-pointer text-left ${
+              className={`p-4 rounded-2xl border transition-all duration-300 flex flex-col justify-between gap-4 cursor-pointer text-left active:scale-95 ${
                 isSelected
-                  ? 'bg-white border-[#E06D53] shadow-warm-md -translate-y-1'
-                  : 'bg-[#FFFDFC] border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm'
+                  ? 'bg-white border-[#E06D53] shadow-warm-md -translate-y-1.5'
+                  : 'bg-[#FFFDFC] border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm hover:-translate-y-0.5'
               }`}
             >
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between">
-                  <span className={`text-xs font-mono font-bold ${isSelected ? 'text-[#E06D53]' : 'text-[#A59288]'}`}>
+                  <span className={`text-xs font-mono font-bold transition-colors ${isSelected ? 'text-[#E06D53]' : 'text-[#A59288]'}`}>
                     {step.num}
                   </span>
                   <div
-                    className={`w-7 h-7 rounded-xl flex items-center justify-center ${
-                      isSelected ? 'bg-[#FDEEE9] text-[#E06D53]' : 'bg-[#FAF6F2] text-[#7A6258]'
+                    className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                      isSelected ? 'bg-[#FDEEE9] text-[#E06D53] scale-110' : 'bg-[#FAF6F2] text-[#7A6258]'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -128,9 +128,9 @@ export function HospitalJourney() {
       </div>
 
       {/* Active Step Deep-Dive Showcase Box */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#EFE5DC] shadow-warm-md flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#EFE5DC] shadow-warm-md flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-300 animate-in fade-in">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-[#FDEEE9] border border-[#F7D5CA] flex items-center justify-center text-[#E06D53] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-[#FDEEE9] border border-[#F7D5CA] flex items-center justify-center text-[#E06D53] shrink-0 animate-heartbeat">
             <Sparkles className="w-6 h-6" />
           </div>
           <div className="flex flex-col gap-1">
@@ -145,8 +145,8 @@ export function HospitalJourney() {
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          <span className="text-xs font-mono px-3 py-1.5 rounded-full bg-[#FAF6F2] text-[#2C1810] border border-[#EFE5DC]">
-            Benchmark: <strong>{steps[activeStep].metric}</strong>
+          <span className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-[#FAF6F2] text-[#2C1810] border border-[#EFE5DC] shadow-warm-sm">
+            Benchmark: <strong className="text-[#E06D53]">{steps[activeStep].metric}</strong>
           </span>
         </div>
       </div>

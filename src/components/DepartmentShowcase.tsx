@@ -10,7 +10,7 @@ export function DepartmentShowcase() {
     <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col gap-16" id="departments">
       {/* Section Header */}
       <div className="flex flex-col items-center text-center gap-4 max-w-3xl mx-auto">
-        <span className="text-xs font-mono uppercase tracking-widest text-[#E06D53] font-bold px-3.5 py-1 rounded-full bg-[#FDEEE9] border border-[#F7D5CA]">
+        <span className="text-xs font-mono uppercase tracking-widest text-[#E06D53] font-bold px-3.5 py-1 rounded-full bg-[#FDEEE9] border border-[#F7D5CA] shimmer-badge">
           DEPARTMENTAL ORCHESTRATION
         </span>
         <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#2C1810]">
@@ -27,20 +27,20 @@ export function DepartmentShowcase() {
           <Link
             key={dept.id}
             href={`/app/departments`}
-            className="p-6 rounded-3xl bg-white border border-[#EFE5DC] hover:border-[#E06D53]/50 shadow-warm-sm hover:shadow-warm-md transition-all duration-200 flex flex-col justify-between gap-6 group hover:-translate-y-1"
+            className="p-6 rounded-3xl bg-white border border-[#EFE5DC] hover:border-[#E06D53]/60 shadow-warm-sm hover:shadow-warm-md hover-lift transition-all duration-300 flex flex-col justify-between gap-6 group"
           >
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#FAF6F2] text-[#E06D53] border border-[#EFE5DC]">
+                <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#FAF6F2] text-[#E06D53] border border-[#EFE5DC] group-hover:border-[#E06D53]/30 transition-colors">
                   {dept.code}
                 </span>
                 {dept.activeAlerts > 0 ? (
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#FEF2F2] text-[#EF4444] border border-[#FEE2E2] flex items-center gap-1">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#FEF2F2] text-[#EF4444] border border-[#FEE2E2] flex items-center gap-1 animate-pulse">
                     <AlertTriangle className="w-3 h-3" />
                     <span>{dept.activeAlerts} Alert</span>
                   </span>
                 ) : (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#E8F8F0] text-[#065F46] border border-[#A7F3D0]">
+                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#E8F8F0] text-[#065F46] border border-[#A7F3D0]">
                     Normal
                   </span>
                 )}
@@ -66,7 +66,7 @@ export function DepartmentShowcase() {
                 </div>
                 <div className="w-full h-2 rounded-full bg-[#FAF6F2] overflow-hidden">
                   <div
-                    className={`h-full rounded-full transition-all ${
+                    className={`h-full rounded-full transition-all duration-700 ease-out ${
                       dept.occupancyPercent >= 90
                         ? 'bg-[#EF4444]'
                         : dept.occupancyPercent >= 80

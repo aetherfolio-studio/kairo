@@ -24,7 +24,9 @@ import {
   CheckCircle2,
   AlertCircle,
   SlidersHorizontal,
-  ChevronDown
+  ChevronDown,
+  Activity,
+  Heart
 } from 'lucide-react';
 import { useHospitalStore } from '@/lib/store';
 
@@ -39,7 +41,7 @@ export function HeroDashboardPreview() {
   } = useHospitalStore();
 
   const [activeNav, setActiveNav] = useState('Overview');
-  const [showAiModal, setShowAiModal] = useState(false);
+  const [lastClickedId, setLastClickedId] = useState<string | null>(null);
 
   const navItems = [
     { name: 'Overview', icon: LayoutDashboard, href: '/app' },
@@ -54,19 +56,31 @@ export function HeroDashboardPreview() {
     { name: 'Settings', icon: Settings, href: '/app/settings' },
   ];
 
+  const handleStatusToggle = (aptId: string, currentStatus: string) => {
+    setLastClickedId(aptId);
+    setTimeout(() => setLastClickedId(null), 400);
+    updateAppointmentStatus(
+      aptId,
+      currentStatus === 'Confirmed' ? 'Completed' : 'Confirmed'
+    );
+  };
+
   return (
-    <div className="w-full max-w-6xl mx-auto rounded-3xl bg-white border border-[#EFE5DC] shadow-warm-lg overflow-hidden transition-all duration-300">
+    <div className="w-full max-w-6xl mx-auto rounded-3xl bg-white border border-[#EFE5DC] shadow-warm-lg overflow-hidden transition-all duration-300 hover:shadow-warm-lg">
       {/* Top Application Frame Header */}
       <div className="bg-[#FDFBF9] px-4 py-2.5 border-b border-[#EFE5DC] flex items-center justify-between text-xs text-[#7A6258]">
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-[#E06D53]/30 border border-[#E06D53]/60"></span>
-          <span className="w-3 h-3 rounded-full bg-[#F59E0B]/30 border border-[#F59E0B]/60"></span>
-          <span className="w-3 h-3 rounded-full bg-[#10B981]/30 border border-[#10B981]/60"></span>
-          <span className="ml-2 font-mono text-[11px] text-[#A59288]">kairo-hospital-os.internal/dashboard</span>
+          <span className="w-3 h-3 rounded-full bg-[#E06D53]/40 border border-[#E06D53]/70 hover:scale-110 transition-transform"></span>
+          <span className="w-3 h-3 rounded-full bg-[#F59E0B]/40 border border-[#F59E0B]/70 hover:scale-110 transition-transform"></span>
+          <span className="w-3 h-3 rounded-full bg-[#10B981]/40 border border-[#10B981]/70 hover:scale-110 transition-transform"></span>
+          <span className="ml-2 font-mono text-[11px] text-[#A59288] flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            kairo-hospital-os.internal/dashboard
+          </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-[#FDEEE9] text-[#E06D53] font-semibold border border-[#F7D5CA]">
-            LIVE INTERACTIVE PREVIEW
+          <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full shimmer-badge text-[#E06D53] font-semibold border border-[#F7D5CA] shadow-warm-sm">
+            ✨ LIVE INTERACTIVE PREVIEW
           </span>
         </div>
       </div>
@@ -93,18 +107,18 @@ export function HeroDashboardPreview() {
                         router.push(item.href);
                       }
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all text-left cursor-pointer ${
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all duration-200 text-left cursor-pointer active:scale-[0.98] ${
                       isActive
-                        ? 'bg-[#FDEEE9] text-[#E06D53] font-semibold shadow-warm-sm'
-                        : 'text-[#7A6258] hover:text-[#2C1810] hover:bg-[#F8F3ED]'
+                        ? 'bg-[#FDEEE9] text-[#E06D53] font-semibold shadow-warm-sm translate-x-0.5'
+                        : 'text-[#7A6258] hover:text-[#2C1810] hover:bg-[#F8F3ED] hover:translate-x-0.5'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Icon className={`w-4 h-4 ${isActive ? 'text-[#E06D53]' : 'text-[#A59288]'}`} />
+                      <Icon className={`w-4 h-4 transition-colors ${isActive ? 'text-[#E06D53]' : 'text-[#A59288]'}`} />
                       <span>{item.name}</span>
                     </div>
                     {item.badge && (
-                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-[#E06D53] text-white">
+                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-[#E06D53] text-white animate-pulse">
                         {item.badge}
                       </span>
                     )}
@@ -115,20 +129,20 @@ export function HeroDashboardPreview() {
           </div>
 
           {/* Bottom Administrator Profile */}
-          <div className="pt-4 border-t border-[#EFE5DC] flex items-center justify-between px-2">
+          <div className="pt-4 border-t border-[#EFE5DC] flex items-center justify-between px-2 hover:bg-[#FAF6F2] p-1.5 rounded-xl transition-colors cursor-pointer group">
             <div className="flex items-center gap-2.5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&auto=format&fit=crop&q=80"
                 alt="Dr. Sarah Chen"
-                className="w-8 h-8 rounded-full object-cover border border-[#E2D3C7]"
+                className="w-8 h-8 rounded-full object-cover border border-[#E2D3C7] group-hover:scale-105 transition-transform"
               />
               <div className="flex flex-col">
                 <span className="text-xs font-bold text-[#2C1810]">Dr. Sarah Chen</span>
                 <span className="text-[10px] text-[#A59288]">Administrator</span>
               </div>
             </div>
-            <ChevronDown className="w-3.5 h-3.5 text-[#A59288]" />
+            <ChevronDown className="w-3.5 h-3.5 text-[#A59288] group-hover:text-[#2C1810] transition-colors" />
           </div>
         </div>
 
@@ -139,7 +153,7 @@ export function HeroDashboardPreview() {
             <div className="flex flex-col gap-1">
               <h2 className="text-xl sm:text-2xl font-bold text-[#2C1810] flex items-center gap-2">
                 <span>Good morning, Dr. Sarah</span>
-                <span className="text-xl">👋</span>
+                <span className="text-xl animate-float inline-block">👋</span>
               </h2>
               <p className="text-xs text-[#7A6258]">
                 Here&apos;s what&apos;s happening at CityCare Hospital today.
@@ -147,19 +161,19 @@ export function HeroDashboardPreview() {
             </div>
 
             <div className="flex items-center gap-2.5">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#EFE5DC] text-xs font-medium text-[#7A6258] shadow-warm-sm">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#EFE5DC] text-xs font-medium text-[#7A6258] shadow-warm-sm hover:border-[#E06D53]/40 transition-colors">
                 <Calendar className="w-3.5 h-3.5 text-[#E06D53]" />
                 <span>May 12, 2026</span>
               </div>
 
-              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#EFE5DC] text-xs font-medium text-[#7A6258] hover:text-[#2C1810] shadow-warm-sm cursor-pointer">
+              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#EFE5DC] text-xs font-medium text-[#7A6258] hover:text-[#2C1810] shadow-warm-sm transition-all active:scale-95 cursor-pointer">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-[#7A6258]" />
                 <span>Filters</span>
               </button>
 
-              <div className="relative p-2 rounded-xl bg-white border border-[#EFE5DC] text-[#7A6258] shadow-warm-sm">
+              <div className="relative p-2 rounded-xl bg-white border border-[#EFE5DC] text-[#7A6258] shadow-warm-sm hover:text-[#2C1810] transition-colors cursor-pointer active:scale-95">
                 <Bell className="w-4 h-4" />
-                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#E06D53]"></span>
+                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#E06D53] animate-pulse"></span>
               </div>
             </div>
           </div>
@@ -167,60 +181,60 @@ export function HeroDashboardPreview() {
           {/* 4 Metric Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
             {/* 1. Appointments Today */}
-            <div className="p-4 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-2">
+            <div className="p-4 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm hover-lift flex flex-col gap-2 transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-[#7A6258]">Appointments Today</span>
-                <div className="w-7 h-7 rounded-lg bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
+                <div className="w-7 h-7 rounded-lg bg-[#FDEEE9] flex items-center justify-center text-[#E06D53] group-hover:rotate-6 transition-transform">
                   <Calendar className="w-3.5 h-3.5" />
                 </div>
               </div>
-              <span className="text-2xl font-bold text-[#2C1810]">128</span>
-              <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-medium">
-                <TrendingUp className="w-3 h-3" />
+              <span className="text-2xl font-bold text-[#2C1810] tracking-tight">128</span>
+              <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-medium font-mono">
+                <TrendingUp className="w-3 h-3 animate-pulse" />
                 <span>↑ 12% vs yesterday</span>
               </div>
             </div>
 
             {/* 2. Patients Admitted */}
-            <div className="p-4 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-2">
+            <div className="p-4 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm hover-lift flex flex-col gap-2 transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-[#7A6258]">Patients Admitted</span>
                 <div className="w-7 h-7 rounded-lg bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
                   <Users className="w-3.5 h-3.5" />
                 </div>
               </div>
-              <span className="text-2xl font-bold text-[#2C1810]">32</span>
-              <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-medium">
-                <TrendingUp className="w-3 h-3" />
+              <span className="text-2xl font-bold text-[#2C1810] tracking-tight">32</span>
+              <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-medium font-mono">
+                <TrendingUp className="w-3 h-3 animate-pulse" />
                 <span>↑ 8% vs yesterday</span>
               </div>
             </div>
 
             {/* 3. Total Revenue */}
-            <div className="p-4 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-2">
+            <div className="p-4 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm hover-lift flex flex-col gap-2 transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-[#7A6258]">Total Revenue</span>
                 <div className="w-7 h-7 rounded-lg bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
                   <Receipt className="w-3.5 h-3.5" />
                 </div>
               </div>
-              <span className="text-2xl font-bold text-[#2C1810]">$24,560</span>
-              <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-medium">
-                <TrendingUp className="w-3 h-3" />
+              <span className="text-2xl font-bold text-[#2C1810] tracking-tight">$24,560</span>
+              <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-medium font-mono">
+                <TrendingUp className="w-3 h-3 animate-pulse" />
                 <span>↑ 15% vs yesterday</span>
               </div>
             </div>
 
             {/* 4. Discharges */}
-            <div className="p-4 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-2">
+            <div className="p-4 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm hover-lift flex flex-col gap-2 transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-[#7A6258]">Discharges</span>
                 <div className="w-7 h-7 rounded-lg bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
                   <UserCheck className="w-3.5 h-3.5" />
                 </div>
               </div>
-              <span className="text-2xl font-bold text-[#2C1810]">18</span>
-              <div className="flex items-center gap-1 text-[11px] text-rose-500 font-medium">
+              <span className="text-2xl font-bold text-[#2C1810] tracking-tight">18</span>
+              <div className="flex items-center gap-1 text-[11px] text-rose-500 font-medium font-mono">
                 <TrendingDown className="w-3 h-3" />
                 <span>↓ 5% vs yesterday</span>
               </div>
@@ -232,7 +246,10 @@ export function HeroDashboardPreview() {
             {/* Left: Today's Schedule Table */}
             <div className="lg:col-span-7 p-4 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col justify-between gap-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#2C1810]">Today&apos;s Schedule</h3>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#2C1810] flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 text-[#E06D53]" />
+                  <span>Today&apos;s Schedule</span>
+                </h3>
                 <span className="text-[11px] text-[#A59288] font-mono">5 Upcoming</span>
               </div>
 
@@ -244,10 +261,12 @@ export function HeroDashboardPreview() {
                       const foundPatient = patients.find((p) => p.name === apt.patientName);
                       if (foundPatient) setSelectedPatient(foundPatient);
                     }}
-                    className="p-2.5 rounded-xl bg-[#FAF6F2] hover:bg-[#F6EFE9] border border-[#EFE5DC]/60 flex items-center justify-between gap-2 transition-all cursor-pointer group"
+                    className="p-2.5 rounded-xl bg-[#FAF6F2] hover:bg-[#F6EFE9] border border-[#EFE5DC]/60 hover:border-[#E06D53]/40 flex items-center justify-between gap-2 transition-all duration-200 cursor-pointer group hover:translate-x-1"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <span className="text-xs font-mono font-bold text-[#2C1810] shrink-0">{apt.time}</span>
+                      <span className="text-xs font-mono font-bold text-[#2C1810] shrink-0 group-hover:text-[#E06D53] transition-colors">
+                        {apt.time}
+                      </span>
                       <div className="flex flex-col min-w-0">
                         <span className="text-xs font-semibold text-[#2C1810] group-hover:text-[#E06D53] truncate transition-colors">
                           {apt.patientName}
@@ -259,20 +278,19 @@ export function HeroDashboardPreview() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        updateAppointmentStatus(
-                          apt.id,
-                          apt.status === 'Confirmed' ? 'Completed' : 'Confirmed'
-                        );
+                        handleStatusToggle(apt.id, apt.status);
                       }}
-                      className={`text-[10px] font-medium px-2.5 py-0.5 rounded-full border transition-all cursor-pointer shrink-0 ${
+                      className={`text-[10px] font-medium px-2.5 py-0.5 rounded-full border transition-all duration-200 cursor-pointer shrink-0 active:scale-90 ${
+                        lastClickedId === apt.id ? 'scale-110' : ''
+                      } ${
                         apt.status === 'Confirmed'
-                          ? 'bg-[#E8F8F0] text-[#065F46] border-[#A7F3D0]'
+                          ? 'bg-[#E8F8F0] text-[#065F46] border-[#A7F3D0] hover:bg-[#D1FAE5]'
                           : apt.status === 'Completed'
-                          ? 'bg-[#EEF2FF] text-[#3730A3] border-[#C7D2FE]'
-                          : 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A]'
+                          ? 'bg-[#EEF2FF] text-[#3730A3] border-[#C7D2FE] hover:bg-[#E0E7FF]'
+                          : 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A] hover:bg-[#FDE68A]'
                       }`}
                     >
-                      {apt.status}
+                      {apt.status} ▾
                     </button>
                   </div>
                 ))}
@@ -280,17 +298,17 @@ export function HeroDashboardPreview() {
 
               <Link
                 href="/app/appointments"
-                className="text-xs font-semibold text-[#E06D53] hover:text-[#C54E35] flex items-center gap-1 self-start pt-1"
+                className="text-xs font-semibold text-[#E06D53] hover:text-[#C54E35] flex items-center gap-1 self-start pt-1 group"
               >
                 <span>View full schedule</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
             {/* Right: Hospital Overview Trend Line + Bed Occupancy + Wait Time */}
             <div className="lg:col-span-5 flex flex-col gap-4">
               {/* Trend Chart Card */}
-              <div className="p-4 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-3">
+              <div className="p-4 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm hover-lift flex flex-col gap-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold uppercase tracking-wider text-[#2C1810]">Hospital Overview</h3>
                   <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-[#FAF6F2] text-[#7A6258] border border-[#EFE5DC]">
@@ -307,12 +325,10 @@ export function HeroDashboardPreview() {
                         <stop offset="100%" stopColor="#E06D53" stopOpacity="0.0" />
                       </linearGradient>
                     </defs>
-                    {/* Area under curve */}
                     <path
                       d="M 10 50 Q 50 15, 90 40 T 170 30 T 230 45 T 290 15 L 290 65 L 10 65 Z"
                       fill="url(#chartGradient)"
                     />
-                    {/* Curve line */}
                     <path
                       d="M 10 50 Q 50 15, 90 40 T 170 30 T 230 45 T 290 15"
                       fill="none"
@@ -322,7 +338,7 @@ export function HeroDashboardPreview() {
                     />
                     {/* Glowing highlight beacon on current day (Sun) */}
                     <circle cx="290" cy="15" r="4.5" fill="#E06D53" />
-                    <circle cx="290" cy="15" r="8" fill="#E06D53" fillOpacity="0.3" className="animate-ping" />
+                    <circle cx="290" cy="15" r="9" fill="#E06D53" fillOpacity="0.3" className="animate-ping" />
                   </svg>
                 </div>
 
@@ -333,25 +349,25 @@ export function HeroDashboardPreview() {
                   <span>Thu</span>
                   <span>Fri</span>
                   <span>Sat</span>
-                  <span className="font-bold text-[#E06D53]">Sun</span>
+                  <span className="font-bold text-[#E06D53]">Sun (Peak)</span>
                 </div>
               </div>
 
               {/* Bed Occupancy & ER Wait Time Grid */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="p-3.5 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-1.5">
+                <div className="p-3.5 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm hover-lift flex flex-col gap-1.5">
                   <span className="text-[11px] font-medium text-[#7A6258]">Bed Occupancy</span>
                   <span className="text-xl font-bold text-[#2C1810]">75%</span>
                   <div className="w-full h-1.5 rounded-full bg-[#FAF6F2] overflow-hidden">
-                    <div className="h-full bg-[#E06D53] rounded-full" style={{ width: '75%' }}></div>
+                    <div className="h-full bg-[#E06D53] rounded-full transition-all duration-700 ease-out" style={{ width: '75%' }}></div>
                   </div>
                   <span className="text-[10px] text-[#A59288] font-mono self-end">24 / 30 Active</span>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-1.5">
+                <div className="p-3.5 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm hover-lift flex flex-col gap-1.5">
                   <span className="text-[11px] font-medium text-[#7A6258]">Average ER Wait</span>
                   <span className="text-xl font-bold text-[#2C1810]">18 min</span>
-                  <div className="flex items-center gap-1 text-[10px] text-emerald-600 font-medium">
+                  <div className="flex items-center gap-1 text-[10px] text-emerald-600 font-medium font-mono">
                     <TrendingDown className="w-3 h-3" />
                     <span>↓ 5 min vs yesterday</span>
                   </div>
@@ -362,9 +378,9 @@ export function HeroDashboardPreview() {
           </div>
 
           {/* Bottom AI Operational Insight Bar */}
-          <div className="p-3.5 rounded-2xl bg-[#FDEEE9] border border-[#F7D5CA] flex flex-col sm:flex-row items-center justify-between gap-3 shadow-warm-sm">
+          <div className="p-3.5 rounded-2xl bg-[#FDEEE9] border border-[#F7D5CA] flex flex-col sm:flex-row items-center justify-between gap-3 shadow-warm-sm animate-glow">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-[#E06D53] shadow-warm-sm shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-[#E06D53] shadow-warm-sm shrink-0 animate-heartbeat">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div className="flex flex-col">
@@ -382,7 +398,7 @@ export function HeroDashboardPreview() {
 
             <Link
               href="/app/ai"
-              className="px-4 py-1.5 bg-white hover:bg-[#FAF6F2] text-[#2C1810] text-xs font-semibold rounded-xl border border-[#EFE5DC] shadow-warm-sm transition-all shrink-0"
+              className="px-4 py-1.5 bg-white hover:bg-[#FAF6F2] text-[#2C1810] text-xs font-semibold rounded-xl border border-[#EFE5DC] shadow-warm-sm transition-all active:scale-95 shrink-0"
             >
               View Details
             </Link>

@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export function AllInOneFeatures() {
-  const [activeFeature, setActiveFeature] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const features = [
     {
@@ -118,7 +118,7 @@ export function AllInOneFeatures() {
     <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col gap-16" id="platform">
       {/* Section Header */}
       <div className="flex flex-col items-center text-center gap-4 max-w-3xl mx-auto">
-        <span className="text-xs font-mono uppercase tracking-widest text-[#E06D53] font-bold px-3.5 py-1 rounded-full bg-[#FDEEE9] border border-[#F7D5CA]">
+        <span className="text-xs font-mono uppercase tracking-widest text-[#E06D53] font-bold px-3.5 py-1 rounded-full bg-[#FDEEE9] border border-[#F7D5CA] shimmer-badge">
           ALL-IN-ONE HOSPITAL OS
         </span>
         <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#2C1810]">
@@ -136,17 +136,20 @@ export function AllInOneFeatures() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {features.map((feat, idx) => {
           const Icon = feat.icon;
+          const isHovered = hoveredIndex === idx;
           return (
             <div
               key={feat.id}
-              className="p-6 rounded-3xl bg-white border border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm hover:shadow-warm-md transition-all duration-200 flex flex-col justify-between gap-6 group"
+              onMouseEnter={() => setHoveredIndex(idx)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className="p-6 rounded-3xl bg-white border border-[#EFE5DC] hover:border-[#E06D53]/60 shadow-warm-sm hover:shadow-warm-md hover-lift transition-all duration-300 flex flex-col justify-between gap-6 group"
             >
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-2xl bg-[#FDEEE9] border border-[#F7D5CA] flex items-center justify-center text-[#E06D53] group-hover:scale-105 transition-transform">
+                  <div className="w-11 h-11 rounded-2xl bg-[#FDEEE9] border border-[#F7D5CA] flex items-center justify-center text-[#E06D53] group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                     <Icon className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-semibold uppercase px-2.5 py-0.5 rounded-full bg-[#FAF6F2] text-[#7A6258] border border-[#EFE5DC]">
+                  <span className="text-[10px] font-mono font-semibold uppercase px-2.5 py-0.5 rounded-full bg-[#FAF6F2] text-[#7A6258] border border-[#EFE5DC] group-hover:border-[#E06D53]/30 transition-colors">
                     {feat.tagline}
                   </span>
                 </div>
@@ -161,12 +164,13 @@ export function AllInOneFeatures() {
                 </div>
 
                 {/* Embedded Mini UI Demonstration Widget */}
-                <div className="p-3.5 rounded-2xl bg-[#FAF6F2] border border-[#EFE5DC] flex flex-col gap-2">
+                <div className="p-3.5 rounded-2xl bg-[#FAF6F2] group-hover:bg-[#FDFBF9] border border-[#EFE5DC] group-hover:border-[#F7D5CA] flex flex-col gap-2 transition-all duration-300">
                   <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-mono font-bold text-[#E06D53] uppercase">
+                    <span className="text-[9px] font-mono font-bold text-[#E06D53] uppercase flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E06D53] animate-pulse"></span>
                       {feat.preview.badge}
                     </span>
-                    <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-white text-[#2C1810] border border-[#EFE5DC]">
+                    <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-white text-[#2C1810] border border-[#EFE5DC] shadow-warm-sm">
                       {feat.preview.indicator}
                     </span>
                   </div>
@@ -182,10 +186,10 @@ export function AllInOneFeatures() {
 
               <Link
                 href={feat.href}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#E06D53] hover:text-[#C54E35] group/link"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#E06D53] hover:text-[#C54E35] group/link active-press"
               >
                 <span>Learn more in app</span>
-                <ArrowRight className="w-3.5 h-3.5 group-link:translate-x-1 transition-transform" />
+                <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1.5 transition-transform duration-200" />
               </Link>
             </div>
           );

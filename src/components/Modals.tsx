@@ -47,8 +47,8 @@ export function BookDemoModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-lg bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl p-6 sm:p-8 shadow-warm-lg flex flex-col gap-6 animate-in zoom-in-95">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full max-w-lg bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl p-6 sm:p-8 shadow-warm-lg flex flex-col gap-6 animate-in zoom-in-95 duration-200">
         <div className="flex items-center justify-between pb-4 border-b border-[#EFE5DC]">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
@@ -61,15 +61,15 @@ export function BookDemoModal() {
           </div>
           <button
             onClick={() => setIsBookDemoOpen(false)}
-            className="p-1.5 text-[#7A6258] hover:text-[#2C1810] rounded-lg cursor-pointer"
+            className="p-1.5 text-[#7A6258] hover:text-[#2C1810] rounded-lg cursor-pointer active:scale-95 transition-transform"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {submitted ? (
-          <div className="p-8 rounded-2xl bg-[#E8F8F0] border border-[#A7F3D0] text-center flex flex-col items-center gap-3">
-            <CheckCircle2 className="w-12 h-12 text-[#065F46]" />
+          <div className="p-8 rounded-2xl bg-[#E8F8F0] border border-[#A7F3D0] text-center flex flex-col items-center gap-3 animate-in zoom-in-95">
+            <CheckCircle2 className="w-12 h-12 text-[#065F46] animate-heartbeat" />
             <h4 className="text-base font-bold text-[#065F46]">Demo Request Scheduled</h4>
             <p className="text-xs text-[#065F46]/80 max-w-xs">
               We have reserved a 30-minute interactive session for <strong>{formData.organization || 'your hospital'}</strong>. A calendar invite has been dispatched.
@@ -86,7 +86,7 @@ export function BookDemoModal() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Dr. Sarah Chen"
-                  className="bg-white border border-[#EFE5DC] rounded-xl px-3.5 py-2 text-xs text-[#2C1810] focus:outline-none focus:border-[#E06D53] shadow-warm-sm"
+                  className="bg-white border border-[#EFE5DC] rounded-xl px-3.5 py-2 text-xs text-[#2C1810] focus:outline-none focus:border-[#E06D53] shadow-warm-sm transition-all"
                 />
               </div>
 
@@ -98,7 +98,7 @@ export function BookDemoModal() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="sarah@citycare.hospital"
-                  className="bg-white border border-[#EFE5DC] rounded-xl px-3.5 py-2 text-xs text-[#2C1810] focus:outline-none focus:border-[#E06D53] shadow-warm-sm"
+                  className="bg-white border border-[#EFE5DC] rounded-xl px-3.5 py-2 text-xs text-[#2C1810] focus:outline-none focus:border-[#E06D53] shadow-warm-sm transition-all"
                 />
               </div>
             </div>
@@ -112,7 +112,7 @@ export function BookDemoModal() {
                   value={formData.organization}
                   onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
                   placeholder="CityCare Memorial Hospital"
-                  className="bg-white border border-[#EFE5DC] rounded-xl px-3.5 py-2 text-xs text-[#2C1810] focus:outline-none focus:border-[#E06D53] shadow-warm-sm"
+                  className="bg-white border border-[#EFE5DC] rounded-xl px-3.5 py-2 text-xs text-[#2C1810] focus:outline-none focus:border-[#E06D53] shadow-warm-sm transition-all"
                 />
               </div>
 
@@ -135,7 +135,7 @@ export function BookDemoModal() {
               <span className="text-[11px] text-[#A59288] font-mono">Demo Concept Simulation</span>
               <button
                 type="submit"
-                className="px-6 py-2.5 bg-[#E06D53] hover:bg-[#D25C42] text-white text-xs font-semibold rounded-xl transition-all shadow-terracotta cursor-pointer"
+                className="px-6 py-2.5 bg-[#E06D53] hover:bg-[#D25C42] text-white text-xs font-semibold rounded-xl transition-all shadow-terracotta cursor-pointer active:scale-95"
               >
                 Confirm Walkthrough
               </button>
@@ -156,13 +156,13 @@ export function PatientRecordDrawer() {
   if (!selectedPatient) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-end bg-[#2C1810]/40 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-xl h-full bg-[#FFFDFC] border-l border-[#EFE5DC] p-6 sm:p-8 shadow-warm-lg flex flex-col justify-between gap-6 overflow-y-auto animate-in slide-in-from-right duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-end bg-[#2C1810]/40 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full max-w-xl h-full bg-[#FFFDFC] border-l border-[#EFE5DC] p-6 sm:p-8 shadow-warm-lg flex flex-col justify-between gap-6 overflow-y-auto animate-in slide-in-from-right duration-300 ease-out">
         <div className="flex flex-col gap-6">
           {/* Header */}
           <div className="flex items-start justify-between pb-4 border-b border-[#EFE5DC]">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-[#FDEEE9] border border-[#F7D5CA] flex items-center justify-center text-[#E06D53] font-bold text-lg font-mono">
+              <div className="w-12 h-12 rounded-2xl bg-[#FDEEE9] border border-[#F7D5CA] flex items-center justify-center text-[#E06D53] font-bold text-lg font-mono animate-heartbeat">
                 {selectedPatient.bloodGroup}
               </div>
               <div className="flex flex-col">
@@ -180,16 +180,16 @@ export function PatientRecordDrawer() {
 
             <button
               onClick={() => setSelectedPatient(null)}
-              className="p-2 text-[#7A6258] hover:text-[#2C1810] rounded-xl cursor-pointer"
+              className="p-2 text-[#7A6258] hover:text-[#2C1810] rounded-xl cursor-pointer active:scale-95 transition-transform"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Current Clinical Status & Bed */}
-          <div className="p-4 rounded-2xl bg-[#FAF6F2] border border-[#EFE5DC] flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-[#FAF6F2] border border-[#EFE5DC] flex items-center justify-between shadow-warm-sm">
             <div className="flex items-center gap-3">
-              <Activity className="w-5 h-5 text-[#E06D53]" />
+              <Activity className="w-5 h-5 text-[#E06D53] animate-pulse" />
               <div className="flex flex-col">
                 <span className="text-xs font-bold text-[#2C1810]">
                   Status: {selectedPatient.status}
@@ -208,7 +208,7 @@ export function PatientRecordDrawer() {
                     selectedPatient.status === 'Admitted' ? 'Discharged' : 'Admitted'
                   )
                 }
-                className="px-3 py-1 bg-white hover:bg-[#F6EFE9] text-[#2C1810] border border-[#EFE5DC] rounded-xl text-xs font-medium transition-colors shadow-warm-sm cursor-pointer"
+                className="px-3.5 py-1.5 bg-white hover:bg-[#F6EFE9] text-[#2C1810] border border-[#EFE5DC] rounded-xl text-xs font-semibold transition-all shadow-warm-sm active:scale-95 cursor-pointer"
               >
                 Toggle Status
               </button>
@@ -221,27 +221,27 @@ export function PatientRecordDrawer() {
               Recorded Clinical Vitals
             </span>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              <div className="p-3 rounded-xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col">
+              <div className="p-3 rounded-xl bg-white border border-[#EFE5DC] shadow-warm-sm hover-lift flex flex-col transition-all">
                 <span className="text-[10px] text-[#7A6258]">Blood Pressure</span>
                 <span className="text-xs font-bold text-[#2C1810] font-mono mt-0.5">
                   {selectedPatient.vitals.bloodPressure}
                 </span>
               </div>
-              <div className="p-3 rounded-xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col">
+              <div className="p-3 rounded-xl bg-white border border-[#EFE5DC] shadow-warm-sm hover-lift flex flex-col transition-all">
                 <span className="text-[10px] text-[#7A6258]">Heart Rate</span>
-                <span className="text-xs font-bold text-[#2C1810] font-mono mt-0.5">
+                <span className="text-xs font-bold text-[#2C1810] font-mono mt-0.5 text-[#E06D53]">
                   {selectedPatient.vitals.heartRate}
                 </span>
               </div>
-              <div className="p-3 rounded-xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col">
+              <div className="p-3 rounded-xl bg-white border border-[#EFE5DC] shadow-warm-sm hover-lift flex flex-col transition-all">
                 <span className="text-[10px] text-[#7A6258]">Temperature</span>
                 <span className="text-xs font-bold text-[#2C1810] font-mono mt-0.5">
                   {selectedPatient.vitals.temperature}
                 </span>
               </div>
-              <div className="p-3 rounded-xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col">
+              <div className="p-3 rounded-xl bg-white border border-[#EFE5DC] shadow-warm-sm hover-lift flex flex-col transition-all">
                 <span className="text-[10px] text-[#7A6258]">Oxygen SpO2</span>
-                <span className="text-xs font-bold text-[#2C1810] font-mono mt-0.5">
+                <span className="text-xs font-bold text-emerald-600 font-mono mt-0.5">
                   {selectedPatient.vitals.oxygenLevel}
                 </span>
               </div>
@@ -257,7 +257,7 @@ export function PatientRecordDrawer() {
               {selectedPatient.medicalHistory.map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#EFE5DC] text-xs text-[#2C1810] shadow-warm-sm"
+                  className="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#EFE5DC] text-xs text-[#2C1810] shadow-warm-sm hover:border-[#E06D53]/40 transition-colors"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                   <span>{item}</span>
@@ -275,7 +275,7 @@ export function PatientRecordDrawer() {
               {selectedPatient.prescriptions.map((rx, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-2.5 rounded-xl bg-[#FAF6F2] border border-[#EFE5DC] text-xs"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-[#FAF6F2] border border-[#EFE5DC] text-xs hover:border-[#E06D53]/40 transition-colors"
                 >
                   <span className="font-bold text-[#2C1810]">{rx.medicine} ({rx.dosage})</span>
                   <span className="text-[#7A6258] font-mono text-[11px]">{rx.frequency}</span>
@@ -307,7 +307,7 @@ export function PatientRecordDrawer() {
 
           <button
             onClick={() => setSelectedPatient(null)}
-            className="px-5 py-2 bg-[#2C1810] hover:bg-[#3D231A] text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+            className="px-5 py-2 bg-[#2C1810] hover:bg-[#3D231A] text-white text-xs font-semibold rounded-xl transition-all shadow-warm-sm active:scale-95 cursor-pointer"
           >
             Close Record
           </button>
@@ -370,8 +370,8 @@ export function NewPatientModal({ isOpen, onClose }: { isOpen: boolean; onClose:
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-lg bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl p-6 sm:p-8 shadow-warm-lg flex flex-col gap-6 animate-in zoom-in-95">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full max-w-lg bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl p-6 sm:p-8 shadow-warm-lg flex flex-col gap-6 animate-in zoom-in-95 duration-200">
         <div className="flex items-center justify-between pb-4 border-b border-[#EFE5DC]">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
@@ -382,7 +382,7 @@ export function NewPatientModal({ isOpen, onClose }: { isOpen: boolean; onClose:
               <p className="text-[11px] text-[#7A6258]">Register clinical intake and allocate ward bed</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 text-[#7A6258] hover:text-[#2C1810] cursor-pointer">
+          <button onClick={onClose} className="p-1.5 text-[#7A6258] hover:text-[#2C1810] cursor-pointer active:scale-95 transition-transform">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -483,7 +483,7 @@ export function NewPatientModal({ isOpen, onClose }: { isOpen: boolean; onClose:
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 bg-[#E06D53] hover:bg-[#D25C42] text-white text-xs font-semibold rounded-xl transition-all shadow-terracotta cursor-pointer"
+              className="px-5 py-2.5 bg-[#E06D53] hover:bg-[#D25C42] text-white text-xs font-semibold rounded-xl transition-all shadow-terracotta cursor-pointer active:scale-95"
             >
               Admit Patient
             </button>
@@ -528,8 +528,8 @@ export function NewAppointmentModal({ isOpen, onClose }: { isOpen: boolean; onCl
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-lg bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl p-6 sm:p-8 shadow-warm-lg flex flex-col gap-6 animate-in zoom-in-95">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full max-w-lg bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl p-6 sm:p-8 shadow-warm-lg flex flex-col gap-6 animate-in zoom-in-95 duration-200">
         <div className="flex items-center justify-between pb-4 border-b border-[#EFE5DC]">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
@@ -540,7 +540,7 @@ export function NewAppointmentModal({ isOpen, onClose }: { isOpen: boolean; onCl
               <p className="text-[11px] text-[#7A6258]">Add clinical consultation to physician schedule</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 text-[#7A6258] hover:text-[#2C1810] cursor-pointer">
+          <button onClick={onClose} className="p-1.5 text-[#7A6258] hover:text-[#2C1810] cursor-pointer active:scale-95 transition-transform">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -637,7 +637,7 @@ export function NewAppointmentModal({ isOpen, onClose }: { isOpen: boolean; onCl
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 bg-[#E06D53] hover:bg-[#D25C42] text-white text-xs font-semibold rounded-xl transition-all shadow-terracotta cursor-pointer"
+              className="px-5 py-2.5 bg-[#E06D53] hover:bg-[#D25C42] text-white text-xs font-semibold rounded-xl transition-all shadow-terracotta cursor-pointer active:scale-95"
             >
               Book Appointment
             </button>
