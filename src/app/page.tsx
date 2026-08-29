@@ -2,189 +2,187 @@
 
 import React from 'react';
 import Link from 'next/link';
-import {
-  Sparkles,
-  ArrowRight,
-  ShieldCheck,
-  Building2,
-  Calendar,
-  Users,
-  Activity,
-  Heart,
-  Play,
-  CheckCircle2,
-  Lock,
-  Stethoscope,
-  Clock
-} from 'lucide-react';
 import { HeroDashboardPreview } from '@/components/HeroDashboardPreview';
 import { AllInOneFeatures } from '@/components/AllInOneFeatures';
 import { HospitalJourney } from '@/components/HospitalJourney';
 import { DepartmentShowcase } from '@/components/DepartmentShowcase';
 import { useHospitalStore } from '@/lib/store';
+import {
+  ArrowRight,
+  Sparkles,
+  ShieldCheck,
+  Activity,
+  CheckCircle2,
+  Calendar,
+  Building2,
+  Users,
+  Play,
+  Heart
+} from 'lucide-react';
 
 export default function HomePage() {
   const { setIsBookDemoOpen } = useHospitalStore();
 
-  const trustPartners = [
-    { name: 'CityCare Hospital', type: 'Tertiary Medical Center' },
-    { name: 'Greenview Medical Center', type: 'Regional Healthcare' },
-    { name: 'Lifeline Clinics', type: 'Outpatient Network' },
-    { name: 'Sunrise Hospitals', type: 'Specialty Orthopedic' },
-    { name: 'HealthPlus Network', type: 'Integrated Health' }
+  const trustLogos = [
+    'CityCare Health',
+    'Mercy Memorial',
+    'St. Jude Clinical',
+    'Apex Surgical Wing',
+    'Novacare Pediatrics',
+    'Metro Urgent Care'
   ];
 
   return (
-    <div className="flex flex-col w-full bg-[#FBF8F5] text-[#2C1810]">
+    <div className="flex flex-col w-full bg-[#FBF8F5] text-[#2C1810] selection:bg-[#FDEEE9] selection:text-[#E06D53]">
       {/* ====================================================
           1. HERO SECTION
           ==================================================== */}
-      <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden flex flex-col items-center text-center">
-        {/* Subtle Ambient Warm Glow behind Hero */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-gradient-to-tr from-[#FDEEE9] via-[#FAD4C0]/40 to-transparent blur-[140px] pointer-events-none rounded-full -z-10"></div>
+      <section className="relative pt-32 sm:pt-40 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center text-center gap-10 overflow-hidden">
+        {/* Soft Ambient Glow (Safe Inline Radial Gradient) */}
+        <div
+          className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[350px] pointer-events-none rounded-full -z-10 opacity-70"
+          style={{
+            background: 'radial-gradient(circle, #FDEEE9 0%, rgba(250, 212, 192, 0.4) 50%, transparent 70%)',
+            filter: 'blur(50px)'
+          }}
+        />
 
-        <div className="max-w-4xl mx-auto flex flex-col items-center gap-6 relative z-10">
-          {/* Top Pill Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FDEEE9] border border-[#F7D5CA] text-xs font-mono text-[#E06D53] font-semibold shadow-warm-sm">
-            <span className="w-2 h-2 rounded-full bg-[#E06D53] animate-pulse"></span>
-            <span>AI-POWERED HOSPITAL MANAGEMENT</span>
-          </div>
+        {/* Top Tag Pill with Shimmer & Horizontal Float */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#F7D5CA] shimmer-badge shadow-warm-sm text-xs font-semibold text-[#E06D53] animate-float-x cursor-default">
+          <Sparkles className="w-3.5 h-3.5 animate-heartbeat text-[#E06D53]" />
+          <span className="font-mono uppercase tracking-wider text-[11px]">
+            AI-Powered Hospital Operations Platform
+          </span>
+        </div>
 
-          {/* Main Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#2C1810] leading-[1.08] max-w-3xl">
+        {/* Hero Editorial Headline */}
+        <div className="flex flex-col gap-4 max-w-4xl">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#2C1810] leading-[1.08]">
             Intelligent care.
-            <span className="block">Seamless operations.</span>
-            <span className="font-serif italic font-normal text-[#E06D53]">
-              Better outcomes.
+            <span className="block font-serif italic font-normal text-[#E06D53]">
+              Seamless operations.
             </span>
+            Better outcomes.
           </h1>
-
-          {/* Supporting Copy */}
-          <p className="text-base sm:text-lg text-[#7A6258] font-normal max-w-2xl leading-relaxed">
-            Kairo connects clinical, operational, and administrative workflows in one intelligent platform—helping hospitals run more efficiently while keeping care at the center.
+          <p className="text-base sm:text-lg text-[#7A6258] max-w-2xl mx-auto leading-relaxed pt-2">
+            Kairo connects clinical, operational, and administrative workflows in one intelligent platform—helping hospitals run more efficiently while keeping patient care at the center.
           </p>
+        </div>
 
-          {/* Primary Action CTAs */}
-          <div className="flex flex-col sm:flex-row items-center gap-3.5 pt-2 w-full sm:w-auto">
-            <button
-              onClick={() => setIsBookDemoOpen(true)}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#E06D53] hover:bg-[#D25C42] text-white font-semibold text-xs sm:text-sm transition-all duration-200 shadow-terracotta hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
-            >
-              <span>Book a Demo</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+        {/* Dual Primary Call-to-Actions */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
+          <button
+            onClick={() => setIsBookDemoOpen(true)}
+            className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-[#E06D53] hover:bg-[#D25C42] text-white font-semibold text-xs tracking-wide transition-all shadow-terracotta hover-lift active-press flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Book a Demo</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
 
-            <Link
-              href="/app"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white hover:bg-[#FAF6F2] text-[#2C1810] font-semibold text-xs sm:text-sm border border-[#EFE5DC] transition-all duration-200 shadow-warm-sm cursor-pointer"
-            >
-              <Play className="w-3.5 h-3.5 text-[#E06D53] fill-[#E06D53]" />
-              <span>Explore Platform</span>
-            </Link>
+          <Link
+            href="/app"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-white hover:bg-[#FAF6F2] text-[#2C1810] border border-[#EFE5DC] font-semibold text-xs transition-all shadow-warm-sm hover-lift active-press flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <Play className="w-3.5 h-3.5 text-[#E06D53] fill-[#E06D53]" />
+            <span>Explore Platform</span>
+          </Link>
+        </div>
+
+        {/* Trust Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 pt-4 text-xs text-[#7A6258]">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-[#E06D53]" />
+            <span className="font-semibold text-[#2C1810]">Clinical Operations</span>
           </div>
-
-          {/* Sub Trust & Product Quality Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-4 text-xs font-medium text-[#7A6258]">
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#EFE5DC] shadow-warm-sm">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#E06D53]" />
-              <span>Clinical Operations</span>
-            </div>
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#EFE5DC] shadow-warm-sm">
-              <Sparkles className="w-3.5 h-3.5 text-[#E06D53]" />
-              <span>AI Assisted</span>
-            </div>
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#EFE5DC] shadow-warm-sm">
-              <Lock className="w-3.5 h-3.5 text-[#E06D53]" />
-              <span>Secure & Reliable</span>
-            </div>
+          <div className="flex items-center gap-2">
+            <Activity className="w-4 h-4 text-[#E06D53]" />
+            <span className="font-semibold text-[#2C1810]">AI Assisted</span>
           </div>
-
-          {/* Trust Caption */}
-          <div className="flex items-center gap-3 pt-2 text-xs text-[#7A6258]">
-            <div className="flex -space-x-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=80&auto=format&fit=crop&q=80" alt="Doctor" className="w-6 h-6 rounded-full border-2 border-white object-cover" />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=80&auto=format&fit=crop&q=80" alt="Doctor" className="w-6 h-6 rounded-full border-2 border-white object-cover" />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=80&auto=format&fit=crop&q=80" alt="Doctor" className="w-6 h-6 rounded-full border-2 border-white object-cover" />
-            </div>
-            <span>Trusted by leading healthcare teams & clinics across the country (concept)</span>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span className="font-semibold text-[#2C1810]">Secure &amp; Reliable</span>
           </div>
         </div>
 
         {/* ====================================================
-            2. HERO PRODUCT DASHBOARD VISUAL
+            2. HERO INTERACTIVE DASHBOARD PREVIEW
             ==================================================== */}
-        <div className="w-full mt-14 relative z-10" id="preview">
+        <div className="w-full pt-6">
           <HeroDashboardPreview />
         </div>
-      </section>
 
-      {/* ====================================================
-          3. TRUSTED HEALTHCARE PROVIDERS STRIP
-          ==================================================== */}
-      <section className="py-10 border-y border-[#EFE5DC] bg-[#FAF6F2] px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-[#7A6258]">
-          <span className="font-mono uppercase tracking-wider font-semibold text-[#A59288] shrink-0">
-            TRUSTED BY MODERN HEALTHCARE TEAMS:
+        {/* Floating Accent Capsule (Horizontal Float Animation) */}
+        <div className="hidden sm:flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-md text-xs text-[#2C1810] animate-float-x-reverse self-end -mt-8 mr-4">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span className="font-mono font-semibold">145 Active Beds • 98.4% Claim Rate</span>
+        </div>
+
+        {/* Trusted By Health Systems Strip */}
+        <div className="w-full pt-16 flex flex-col items-center gap-6 border-t border-[#EFE5DC]">
+          <span className="text-[11px] font-mono uppercase tracking-widest text-[#A59288] font-bold">
+            TRUSTED BY CLINICAL TEAMS NATIONWIDE (PORTFOLIO CONCEPT)
           </span>
-          <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-12 font-semibold text-[#2C1810]">
-            {trustPartners.map((p, idx) => (
-              <div key={idx} className="flex items-center gap-2 hover:text-[#E06D53] transition-colors">
-                <Building2 className="w-4 h-4 text-[#E06D53]" />
-                <span>{p.name}</span>
-              </div>
+          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-12 opacity-60">
+            {trustLogos.map((logo, idx) => (
+              <span
+                key={idx}
+                className="font-bold text-sm text-[#7A6258] tracking-tight hover:text-[#E06D53] transition-colors cursor-default"
+              >
+                {logo}
+              </span>
             ))}
           </div>
         </div>
       </section>
 
       {/* ====================================================
-          4. ALL-IN-ONE HOSPITAL OS FEATURES
+          3. ALL-IN-ONE HOSPITAL OS FEATURES (6 CARDS)
           ==================================================== */}
       <AllInOneFeatures />
 
       {/* ====================================================
-          5. CONNECTED PATIENT JOURNEY FLOW
+          4. CONNECTED HOSPITAL JOURNEY (7 STAGES)
           ==================================================== */}
       <HospitalJourney />
 
       {/* ====================================================
-          6. CLINICAL DEPARTMENTS BREAKDOWN
+          5. DEPARTMENT SHOWCASE (8 UNITS)
           ==================================================== */}
       <DepartmentShowcase />
 
       {/* ====================================================
-          7. BOTTOM CALL TO ACTION
+          6. BOTTOM CALL TO ACTION
           ==================================================== */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
-        <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-br from-[#FFFDFC] via-[#FDEEE9]/60 to-[#FFFDFC] border border-[#EFE5DC] shadow-warm-lg flex flex-col items-center gap-6">
-          <div className="w-12 h-12 rounded-2xl bg-[#E06D53] flex items-center justify-center text-white shadow-terracotta">
-            <Stethoscope className="w-6 h-6" />
-          </div>
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div className="p-8 sm:p-16 rounded-3xl bg-gradient-to-br from-white via-[#FDEEE9]/60 to-white border border-[#EFE5DC] shadow-warm-lg flex flex-col items-center text-center gap-8">
+          <span className="text-xs font-mono uppercase tracking-widest text-[#E06D53] font-bold px-3.5 py-1 rounded-full bg-[#FDEEE9] border border-[#F7D5CA] shimmer-badge">
+            JOIN MODERN HEALTHCARE FACILITIES
+          </span>
 
-          <div className="flex flex-col gap-2 max-w-xl">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#2C1810]">
-              Ready to modernize your hospital&apos;s operational core?
-            </h2>
-            <p className="text-xs sm:text-sm text-[#7A6258] leading-relaxed">
-              Experience the clarity, calm, and efficiency of Kairo Hospital OS. Explore the live web application or schedule a demo walkthrough.
-            </p>
-          </div>
+          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#2C1810] max-w-3xl leading-tight">
+            Elevate hospital operations.
+            <span className="block font-serif italic font-normal text-[#E06D53]">
+              Empower your clinical staff today.
+            </span>
+          </h2>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+          <p className="text-sm sm:text-base text-[#7A6258] max-w-xl leading-relaxed">
+            Experience how Kairo unifies patient records, smart scheduling, ward beds, inventory, and billing into a single calm interface.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center gap-4">
             <button
               onClick={() => setIsBookDemoOpen(true)}
-              className="px-7 py-3.5 rounded-full bg-[#E06D53] hover:bg-[#D25C42] text-white font-semibold text-xs sm:text-sm transition-all shadow-terracotta cursor-pointer"
+              className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#E06D53] hover:bg-[#D25C42] text-white font-semibold text-xs tracking-wide transition-all shadow-terracotta hover-lift active-press flex items-center justify-center gap-2 cursor-pointer"
             >
-              Book a Facility Demo
+              <span>Schedule an Operations Demo</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
             <Link
               href="/app"
-              className="px-7 py-3.5 rounded-full bg-white hover:bg-[#FAF6F2] text-[#2C1810] font-semibold text-xs sm:text-sm border border-[#EFE5DC] transition-all shadow-warm-sm"
+              className="w-full sm:w-auto px-8 py-4 rounded-full bg-white hover:bg-[#FAF6F2] text-[#2C1810] border border-[#EFE5DC] font-semibold text-xs transition-all shadow-warm-sm hover-lift active-press flex items-center justify-center gap-2"
             >
-              Launch Live App Workspace
+              <span>Open Live App Workspace</span>
             </Link>
           </div>
         </div>
