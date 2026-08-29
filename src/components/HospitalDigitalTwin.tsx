@@ -132,12 +132,15 @@ export function HospitalDigitalTwin() {
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-blip"></span>
                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#2C1810]">
                   CityCare Hospital Blueprint Model 4.2
                 </span>
               </div>
-              <span className="text-[11px] font-mono text-[#A59288]">Live 3D-Feel SVG Map</span>
+              <span className="text-[11px] font-mono text-[#A59288] flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#E06D53] animate-ping" />
+                <span>Live 3D-Feel SVG Map</span>
+              </span>
             </div>
 
             {/* Wing Switcher Pills */}
@@ -151,9 +154,9 @@ export function HospitalDigitalTwin() {
                 <button
                   key={w.id}
                   onClick={() => setSelectedWing(w.id)}
-                  className={`p-2.5 rounded-2xl text-left border transition-all duration-200 cursor-pointer active:scale-95 flex flex-col gap-1 ${
+                  className={`p-2.5 rounded-2xl text-left border transition-all duration-300 cursor-pointer active:scale-95 flex flex-col gap-1 hover-lift ${
                     selectedWing === w.id
-                      ? 'bg-white border-[#E06D53] text-[#2C1810] shadow-warm-md -translate-y-0.5'
+                      ? 'bg-white border-[#E06D53] text-[#2C1810] shadow-warm-md -translate-y-1 animate-glow'
                       : 'bg-[#FFFDFC] border-[#EFE5DC] text-[#7A6258] hover:border-[#E06D53]/40'
                   }`}
                 >
@@ -198,7 +201,7 @@ export function HospitalDigitalTwin() {
                   />
                   <circle cx="140" cy="155" r="4" fill={selectedWing === 'wingA' ? '#E06D53' : '#A59288'} />
                   {selectedWing === 'wingA' && (
-                    <circle cx="140" cy="155" r="8" fill="#E06D53" fillOpacity="0.3" className="animate-ping" />
+                    <circle cx="140" cy="155" r="10" fill="#E06D53" fillOpacity="0.25" className="animate-beacon" />
                   )}
                   <text x="140" y="175" textAnchor="middle" fill={selectedWing === 'wingA' ? '#E06D53' : '#7A6258'} fontSize="9" fontFamily="monospace" fontWeight="bold">
                     WING A (ER)
@@ -219,7 +222,7 @@ export function HospitalDigitalTwin() {
                   />
                   <circle cx="355" cy="50" r="4" fill={selectedWing === 'wingB' ? '#E06D53' : '#A59288'} />
                   {selectedWing === 'wingB' && (
-                    <circle cx="355" cy="50" r="8" fill="#E06D53" fillOpacity="0.3" className="animate-ping" />
+                    <circle cx="355" cy="50" r="10" fill="#E06D53" fillOpacity="0.25" className="animate-beacon" />
                   )}
                   <text x="355" y="70" textAnchor="middle" fill={selectedWing === 'wingB' ? '#E06D53' : '#7A6258'} fontSize="9" fontFamily="monospace" fontWeight="bold">
                     WING B (ICU)
@@ -240,7 +243,7 @@ export function HospitalDigitalTwin() {
                   />
                   <circle cx="355" cy="155" r="4" fill={selectedWing === 'wingC' ? '#E06D53' : '#A59288'} />
                   {selectedWing === 'wingC' && (
-                    <circle cx="355" cy="155" r="8" fill="#E06D53" fillOpacity="0.3" className="animate-ping" />
+                    <circle cx="355" cy="155" r="10" fill="#E06D53" fillOpacity="0.25" className="animate-beacon" />
                   )}
                   <text x="355" y="175" textAnchor="middle" fill={selectedWing === 'wingC' ? '#E06D53' : '#7A6258'} fontSize="9" fontFamily="monospace" fontWeight="bold">
                     WING C (OR)
@@ -261,19 +264,19 @@ export function HospitalDigitalTwin() {
                   />
                   <circle cx="140" cy="50" r="4" fill={selectedWing === 'wingD' ? '#E06D53' : '#A59288'} />
                   {selectedWing === 'wingD' && (
-                    <circle cx="140" cy="50" r="8" fill="#E06D53" fillOpacity="0.3" className="animate-ping" />
+                    <circle cx="140" cy="50" r="10" fill="#E06D53" fillOpacity="0.25" className="animate-beacon" />
                   )}
                   <text x="140" y="70" textAnchor="middle" fill={selectedWing === 'wingD' ? '#E06D53' : '#7A6258'} fontSize="9" fontFamily="monospace" fontWeight="bold">
                     WING D (PACS)
                   </text>
                 </g>
 
-                {/* Simulated Inbound Ambulance Trajectory */}
+                {/* Simulated Inbound Ambulance Trajectory with stream animation */}
                 {inboundTriggered && (
                   <g className="animate-in fade-in">
-                    <line x1="10" y1="200" x2="110" y2="150" stroke="#EF4444" strokeWidth="3" strokeDasharray="5,5" />
-                    <circle cx="110" cy="150" r="6" fill="#EF4444" className="animate-ping" />
-                    <text x="60" y="165" fill="#EF4444" fontSize="9" fontFamily="monospace" fontWeight="bold">
+                    <line x1="10" y1="200" x2="110" y2="150" stroke="#EF4444" strokeWidth="3.5" strokeDasharray="6 6" className="animate-data-stream" />
+                    <circle cx="110" cy="150" r="8" fill="#EF4444" className="animate-ping" />
+                    <text x="60" y="165" fill="#EF4444" fontSize="9" fontFamily="monospace" fontWeight="bold" className="animate-strobe">
                       INBOUND RESCUE
                     </text>
                   </g>
@@ -291,9 +294,9 @@ export function HospitalDigitalTwin() {
 
             <button
               onClick={handleSimulateAmbulance}
-              className="px-4 py-2 rounded-xl bg-white hover:bg-[#FDEEE9] text-[#E06D53] border border-[#F7D5CA] text-xs font-bold font-mono shadow-warm-sm transition-all active:scale-95 cursor-pointer flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl bg-white hover:bg-[#FDEEE9] text-[#E06D53] border border-[#F7D5CA] text-xs font-bold font-mono shadow-warm-sm transition-all active:scale-95 cursor-pointer flex items-center gap-1.5 hover-lift hover-glow"
             >
-              <AlertTriangle className="w-3.5 h-3.5 text-[#EF4444]" />
+              <AlertTriangle className="w-3.5 h-3.5 text-[#EF4444] animate-strobe" />
               <span>Simulate Inbound Ambulance</span>
             </button>
           </div>
@@ -315,10 +318,10 @@ export function HospitalDigitalTwin() {
             </div>
 
             {/* Continuous Live ECG Telemetry Ribbon */}
-            <div className="p-3.5 rounded-2xl bg-[#FAF6F2] border border-[#EFE5DC] flex flex-col gap-1.5">
+            <div className="p-3.5 rounded-2xl bg-[#FAF6F2] border border-[#EFE5DC] flex flex-col gap-1.5 shadow-warm-sm">
               <div className="flex items-center justify-between text-[10px] font-mono">
                 <span className="text-[#E06D53] font-bold flex items-center gap-1">
-                  <Activity className="w-3 h-3 animate-pulse" />
+                  <Activity className="w-3 h-3 animate-heartbeat text-[#E06D53]" />
                   <span>Bedside Telemetry Channel 01</span>
                 </span>
                 <span className="text-[#065F46] font-bold">HR 74 bpm • Sinus Normal</span>
@@ -335,7 +338,7 @@ export function HospitalDigitalTwin() {
                 {currentWing.rooms.map((room, idx) => (
                   <div
                     key={idx}
-                    className="p-2.5 rounded-xl bg-white border border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm flex items-center justify-between gap-2 text-xs transition-colors"
+                    className="p-2.5 rounded-xl bg-white border border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm flex items-center justify-between gap-2 text-xs transition-all duration-200 hover:translate-x-1"
                   >
                     <div className="flex flex-col min-w-0">
                       <span className="font-bold text-[#2C1810] truncate">{room.name}</span>
@@ -360,7 +363,7 @@ export function HospitalDigitalTwin() {
           </div>
 
           {/* AI Operational Recommendation Callout */}
-          <div className="p-3.5 rounded-2xl bg-[#FDEEE9] border border-[#F7D5CA] flex items-start gap-2.5 text-xs">
+          <div className="p-3.5 rounded-2xl bg-[#FDEEE9] border border-[#F7D5CA] flex items-start gap-2.5 text-xs shadow-warm-sm animate-float">
             <Sparkles className="w-4 h-4 text-[#E06D53] shrink-0 mt-0.5 animate-heartbeat" />
             <div className="flex flex-col gap-0.5">
               <span className="font-bold text-[#E06D53] font-mono uppercase text-[10px]">

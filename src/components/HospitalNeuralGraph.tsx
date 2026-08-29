@@ -74,22 +74,29 @@ export function HospitalNeuralGraph() {
           {/* Background Ambient Grid */}
           <div className="absolute inset-0 bg-[radial-gradient(#E2D3C7_1px,transparent_1px)] [background-size:16px_16px] opacity-40"></div>
 
-          {/* SVG Connection Lines & Particle Curves */}
+          {/* SVG Connection Lines & Active Streaming Particles */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 320">
-            {/* Lines from center (200, 160) to nodes */}
-            <line x1="200" y1="160" x2="80" y2="70" stroke={activeNode === 'er' ? '#E06D53' : '#E2D3C7'} strokeWidth={activeNode === 'er' ? '2.5' : '1.5'} strokeDasharray="4 4" />
-            <line x1="200" y1="160" x2="320" y2="70" stroke={activeNode === 'icu' ? '#E06D53' : '#E2D3C7'} strokeWidth={activeNode === 'icu' ? '2.5' : '1.5'} strokeDasharray="4 4" />
-            <line x1="200" y1="160" x2="330" y2="250" stroke={activeNode === 'or' ? '#E06D53' : '#E2D3C7'} strokeWidth={activeNode === 'or' ? '2.5' : '1.5'} strokeDasharray="4 4" />
-            <line x1="200" y1="160" x2="70" y2="250" stroke={activeNode === 'pharmacy' ? '#E06D53' : '#E2D3C7'} strokeWidth={activeNode === 'pharmacy' ? '2.5' : '1.5'} strokeDasharray="4 4" />
-            <line x1="200" y1="160" x2="200" y2="280" stroke={activeNode === 'billing' ? '#E06D53' : '#E2D3C7'} strokeWidth={activeNode === 'billing' ? '2.5' : '1.5'} strokeDasharray="4 4" />
+            {/* Marching dashed data stream lines */}
+            <line x1="200" y1="160" x2="80" y2="70" stroke={activeNode === 'er' ? '#E06D53' : '#E2D3C7'} strokeWidth={activeNode === 'er' ? '3' : '1.5'} strokeDasharray="6 6" className="animate-data-stream" />
+            <line x1="200" y1="160" x2="320" y2="70" stroke={activeNode === 'icu' ? '#E06D53' : '#E2D3C7'} strokeWidth={activeNode === 'icu' ? '3' : '1.5'} strokeDasharray="6 6" className="animate-data-stream" />
+            <line x1="200" y1="160" x2="330" y2="250" stroke={activeNode === 'or' ? '#E06D53' : '#E2D3C7'} strokeWidth={activeNode === 'or' ? '3' : '1.5'} strokeDasharray="6 6" className="animate-data-stream" />
+            <line x1="200" y1="160" x2="70" y2="250" stroke={activeNode === 'pharmacy' ? '#E06D53' : '#E2D3C7'} strokeWidth={activeNode === 'pharmacy' ? '3' : '1.5'} strokeDasharray="6 6" className="animate-data-stream" />
+            <line x1="200" y1="160" x2="200" y2="280" stroke={activeNode === 'billing' ? '#E06D53' : '#E2D3C7'} strokeWidth={activeNode === 'billing' ? '3' : '1.5'} strokeDasharray="6 6" className="animate-data-stream" />
+
+            {/* Radar Scan Circle in Background */}
+            <circle cx="200" cy="160" r="70" fill="none" stroke="#F7D5CA" strokeWidth="1" strokeDasharray="3 3" />
+            <circle cx="200" cy="160" r="115" fill="none" stroke="#EFE5DC" strokeWidth="1" />
           </svg>
 
-          {/* Center Pulsating Kairo Core Node */}
+          {/* Center Pulsating Kairo Core Node with concentric beacons */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center">
-            <div className="w-16 h-16 rounded-3xl bg-[#FDEEE9] border-2 border-[#E06D53] flex items-center justify-center text-[#E06D53] shadow-terracotta animate-heartbeat">
-              <Sparkles className="w-8 h-8" />
+            <div className="relative">
+              <span className="absolute -inset-2 rounded-3xl bg-[#E06D53]/20 animate-beacon pointer-events-none" />
+              <div className="w-16 h-16 rounded-3xl bg-[#FDEEE9] border-2 border-[#E06D53] flex items-center justify-center text-[#E06D53] shadow-terracotta animate-heartbeat">
+                <Sparkles className="w-8 h-8" />
+              </div>
             </div>
-            <span className="text-[10px] font-mono font-bold text-[#2C1810] mt-2 bg-white/90 px-2 py-0.5 rounded-full border border-[#EFE5DC] shadow-warm-sm">
+            <span className="text-[10px] font-mono font-bold text-[#2C1810] mt-2 bg-white/95 px-2.5 py-0.5 rounded-full border border-[#EFE5DC] shadow-warm-sm animate-float">
               KAIRO CORE
             </span>
           </div>
@@ -97,22 +104,22 @@ export function HospitalNeuralGraph() {
           {/* Node 1: Emergency (Top Left) */}
           <button
             onClick={() => setActiveNode('er')}
-            className={`absolute top-4 left-4 sm:top-8 sm:left-8 p-3 rounded-2xl border transition-all duration-200 cursor-pointer active:scale-95 flex items-center gap-2 ${
+            className={`absolute top-4 left-4 sm:top-8 sm:left-8 p-3 rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-2 hover-lift ${
               activeNode === 'er'
-                ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105'
+                ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105 animate-glow'
                 : 'bg-white text-[#2C1810] border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm'
             }`}
           >
-            <Activity className="w-4 h-4" />
+            <Activity className="w-4 h-4 animate-pulse" />
             <span className="text-xs font-bold">Emergency (ER)</span>
           </button>
 
           {/* Node 2: ICU & Cardio (Top Right) */}
           <button
             onClick={() => setActiveNode('icu')}
-            className={`absolute top-4 right-4 sm:top-8 sm:right-8 p-3 rounded-2xl border transition-all duration-200 cursor-pointer active:scale-95 flex items-center gap-2 ${
+            className={`absolute top-4 right-4 sm:top-8 sm:right-8 p-3 rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-2 hover-lift ${
               activeNode === 'icu'
-                ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105'
+                ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105 animate-glow'
                 : 'bg-white text-[#2C1810] border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm'
             }`}
           >
@@ -123,9 +130,9 @@ export function HospitalNeuralGraph() {
           {/* Node 3: Operating Theater (Bottom Right) */}
           <button
             onClick={() => setActiveNode('or')}
-            className={`absolute bottom-4 right-4 sm:bottom-8 sm:right-8 p-3 rounded-2xl border transition-all duration-200 cursor-pointer active:scale-95 flex items-center gap-2 ${
+            className={`absolute bottom-4 right-4 sm:bottom-8 sm:right-8 p-3 rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-2 hover-lift ${
               activeNode === 'or'
-                ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105'
+                ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105 animate-glow'
                 : 'bg-white text-[#2C1810] border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm'
             }`}
           >
@@ -136,9 +143,9 @@ export function HospitalNeuralGraph() {
           {/* Node 4: Pharmacy (Bottom Left) */}
           <button
             onClick={() => setActiveNode('pharmacy')}
-            className={`absolute bottom-4 left-4 sm:bottom-8 sm:left-8 p-3 rounded-2xl border transition-all duration-200 cursor-pointer active:scale-95 flex items-center gap-2 ${
+            className={`absolute bottom-4 left-4 sm:bottom-8 sm:left-8 p-3 rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-2 hover-lift ${
               activeNode === 'pharmacy'
-                ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105'
+                ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105 animate-glow'
                 : 'bg-white text-[#2C1810] border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm'
             }`}
           >
@@ -149,9 +156,9 @@ export function HospitalNeuralGraph() {
           {/* Node 5: Billing (Bottom Center) */}
           <button
             onClick={() => setActiveNode('billing')}
-            className={`absolute bottom-1 left-1/2 -translate-x-1/2 p-2.5 rounded-2xl border transition-all duration-200 cursor-pointer active:scale-95 flex items-center gap-1.5 ${
+            className={`absolute bottom-1 left-1/2 -translate-x-1/2 p-2.5 rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-1.5 hover-lift ${
               activeNode === 'billing'
-                ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105'
+                ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105 animate-glow'
                 : 'bg-white text-[#2C1810] border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm'
             }`}
           >
@@ -164,12 +171,12 @@ export function HospitalNeuralGraph() {
         <div className="lg:col-span-5 flex flex-col justify-between gap-6 animate-in fade-in duration-200">
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#E06D53] px-2.5 py-0.5 rounded-full bg-[#FDEEE9] border border-[#F7D5CA]">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#E06D53] px-2.5 py-0.5 rounded-full bg-[#FDEEE9] border border-[#F7D5CA] shimmer-badge">
                 Live Connected Stream
               </span>
               <span className="text-xs font-mono text-[#7A6258] flex items-center gap-1">
                 <Radio className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
-                <span>Synchronized</span>
+                <span className="font-bold text-emerald-700">Synchronized</span>
               </span>
             </div>
 
@@ -179,9 +186,10 @@ export function HospitalNeuralGraph() {
             </div>
 
             {/* AI Reasoning Log */}
-            <div className="p-4 rounded-2xl bg-[#FAF6F2] border border-[#EFE5DC] flex flex-col gap-2">
-              <span className="text-[10px] font-mono font-bold text-[#7A6258] uppercase">
-                Active Algorithmic Optimization
+            <div className="p-4 rounded-2xl bg-[#FAF6F2] border border-[#EFE5DC] flex flex-col gap-2 shadow-warm-sm">
+              <span className="text-[10px] font-mono font-bold text-[#7A6258] uppercase flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-[#E06D53] animate-heartbeat" />
+                <span>Active Algorithmic Optimization</span>
               </span>
               <p className="text-xs text-[#2C1810] leading-relaxed">
                 {current.aiAction}
@@ -194,7 +202,7 @@ export function HospitalNeuralGraph() {
                 Synchronized Clinical Signals
               </span>
               {current.signals.map((sig, i) => (
-                <div key={i} className="flex items-center gap-2 text-xs text-[#2C1810]">
+                <div key={i} className="flex items-center gap-2 text-xs text-[#2C1810] hover:translate-x-1 transition-transform">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                   <span>{sig}</span>
                 </div>
@@ -202,8 +210,11 @@ export function HospitalNeuralGraph() {
             </div>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-[#FFFDFC] border border-[#EFE5DC] flex items-center justify-between text-xs text-[#7A6258]">
-            <span className="font-mono text-[11px]">Latency: &lt; 28ms</span>
+          <div className="p-3.5 rounded-2xl bg-[#FFFDFC] border border-[#EFE5DC] flex items-center justify-between text-xs text-[#7A6258] shadow-warm-sm">
+            <span className="font-mono text-[11px] flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-blip" />
+              <span>Telemetry Latency: &lt; 28ms</span>
+            </span>
             <span className="text-[#E06D53] font-bold font-mono">Zero EHR Silos</span>
           </div>
         </div>
