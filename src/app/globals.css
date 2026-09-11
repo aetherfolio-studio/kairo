@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 @source "../**/*.{js,ts,jsx,tsx,mdx}";
 @source "../../**/*.{js,ts,jsx,tsx,mdx}";
@@ -265,4 +265,12 @@ body {
 .active-press:active {
   transform: scale3d(0.97, 0.97, 1);
   transition: transform 0.08s ease;
+}
+
+/* Mobile Safe Area Inset Support */
+.pb-safe {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+}
+.pt-safe {
+  padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
 }

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { useHospitalStore } from '@/lib/store';
@@ -83,9 +83,62 @@ export default function BillingPage() {
         </div>
       </div>
 
-      {/* Invoices List */}
+      {/* Invoices List: Mobile Cards + Desktop Table */}
       <div className="rounded-3xl bg-white border border-[#EFE5DC] shadow-warm-sm overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* VIEW 1: Mobile Cards (< md) */}
+        <div className="block md:hidden divide-y divide-[#EFE5DC]/80">
+          {filteredInvoices.length === 0 ? (
+            <div className="p-8 text-center text-xs text-[#A59288]">
+              No invoices found matching your filters.
+            </div>
+          ) : (
+            filteredInvoices.map((inv) => (
+              <div key={inv.id} className="p-4 flex flex-col gap-3 hover:bg-[#FAF6F2] transition-colors">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono font-bold text-xs text-[#E06D53]">
+                    {inv.invoiceNumber}
+                  </span>
+                  <button
+                    onClick={() =>
+                      updateInvoiceStatus(
+                        inv.id,
+                        inv.status === 'Paid' ? 'Pending' : 'Paid'
+                      )
+                    }
+                    className={`px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold border transition-all cursor-pointer ${
+                      inv.status === 'Paid'
+                        ? 'bg-[#E8F8F0] text-[#065F46] border-[#A7F3D0]'
+                        : inv.status === 'Pending'
+                        ? 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A]'
+                        : 'bg-[#EEF2FF] text-[#3730A3] border-[#C7D2FE]'
+                    }`}
+                  >
+                    {inv.status} ▾
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="font-bold text-sm text-[#2C1810]">{inv.patientName}</span>
+                    <span className="text-xs text-[#7A6258]">{inv.department} • {inv.insuranceProvider || 'Direct Pay'}</span>
+                  </div>
+                  <span className="font-mono font-bold text-base text-[#2C1810]">
+                    ${inv.amount.toLocaleString()}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-end pt-1 border-t border-[#EFE5DC]/60 text-xs font-semibold text-[#E06D53]">
+                  <span className="hover:underline cursor-pointer">
+                    Download Statement PDF →
+                  </span>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* VIEW 2: Desktop Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
               <tr className="border-b border-[#EFE5DC] bg-[#FAF6F2] text-[#7A6258] font-mono text-[11px] uppercase">

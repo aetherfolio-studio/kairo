@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { useHospitalStore } from '@/lib/store';
@@ -65,9 +65,66 @@ export default function InventoryPage() {
         </div>
       </div>
 
-      {/* Inventory Items Table */}
+      {/* Inventory Items: Mobile Cards + Desktop Table */}
       <div className="rounded-3xl bg-white border border-[#EFE5DC] shadow-warm-sm overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* VIEW 1: Mobile Cards (< md) */}
+        <div className="block md:hidden divide-y divide-[#EFE5DC]/80">
+          {filteredInventory.length === 0 ? (
+            <div className="p-8 text-center text-xs text-[#A59288]">
+              No inventory items found matching your filters.
+            </div>
+          ) : (
+            filteredInventory.map((item) => (
+              <div key={item.id} className="p-4 flex flex-col gap-3 hover:bg-[#FAF6F2] transition-colors">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="font-bold text-sm text-[#2C1810]">{item.name}</h3>
+                    <span className="text-[11px] text-[#7A6258]">{item.category} • {item.location}</span>
+                  </div>
+                  <span
+                    className={`shrink-0 px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold border ${
+                      item.status === 'In Stock'
+                        ? 'bg-[#E8F8F0] text-[#065F46] border-[#A7F3D0]'
+                        : item.status === 'Low Stock'
+                        ? 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A]'
+                        : 'bg-[#FEF2F2] text-[#991B1B] border-[#FEE2E2]'
+                    }`}
+                  >
+                    {item.status}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between text-xs bg-[#FAF6F2] p-2.5 rounded-xl border border-[#EFE5DC]/60">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] uppercase font-mono text-[#A59288]">In Stock</span>
+                    <span className="font-mono font-bold text-sm text-[#2C1810]">
+                      {item.stockLevel} <span className="text-xs font-normal text-[#7A6258]">{item.unit}</span>
+                    </span>
+                  </div>
+                  <div className="flex flex-col text-right">
+                    <span className="text-[10px] uppercase font-mono text-[#A59288]">Min Safe Level</span>
+                    <span className="font-mono text-xs text-[#7A6258]">
+                      {item.minThreshold} {item.unit}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end pt-1">
+                  <button
+                    onClick={() => restockItem(item.id, 100)}
+                    className="w-full min-h-[44px] flex items-center justify-center gap-1.5 px-4 py-2 bg-[#FAF6F2] hover:bg-[#E06D53] hover:text-white text-[#2C1810] rounded-xl border border-[#EFE5DC] text-xs font-semibold transition-colors active:scale-[0.98] cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    Restock +100 Units
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* VIEW 2: Desktop Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
               <tr className="border-b border-[#EFE5DC] bg-[#FAF6F2] text-[#7A6258] font-mono text-[11px] uppercase">

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { useHospitalStore } from '@/lib/store';
@@ -45,12 +45,12 @@ export default function BedsPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-2.5 w-full sm:w-auto">
           {/* View Mode Toggle */}
           <div className="flex items-center p-1 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm">
             <button
               onClick={() => setViewMode('cards')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer active:scale-95 ${
                 viewMode === 'cards'
                   ? 'bg-[#E06D53] text-white shadow-warm-sm'
                   : 'text-[#7A6258] hover:text-[#2C1810]'
@@ -61,7 +61,7 @@ export default function BedsPage() {
             </button>
             <button
               onClick={() => setViewMode('grid')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer active:scale-95 ${
                 viewMode === 'grid'
                   ? 'bg-[#E06D53] text-white shadow-warm-sm'
                   : 'text-[#7A6258] hover:text-[#2C1810]'
@@ -72,7 +72,7 @@ export default function BedsPage() {
             </button>
           </div>
 
-          <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm">
+          <div className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white border border-[#EFE5DC] shadow-warm-sm shrink-0">
             <BedDouble className="w-4 h-4 text-[#E06D53] animate-pulse" />
             <span className="text-xs font-semibold text-[#2C1810]">
               Facility: <strong className="text-[#E06D53] font-mono">{overallBedOccupancyPercent}%</strong>
@@ -182,18 +182,18 @@ export default function BedsPage() {
                     <button
                       onClick={() => handleAdjust(ward.id, -1)}
                       disabled={ward.occupied <= 0}
-                      className="p-2 rounded-xl bg-[#FAF6F2] hover:bg-[#F6EFE9] text-[#2C1810] border border-[#EFE5DC] disabled:opacity-30 cursor-pointer active:scale-90 transition-transform"
+                      className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#FAF6F2] hover:bg-[#F6EFE9] text-[#2C1810] border border-[#EFE5DC] disabled:opacity-30 cursor-pointer active:scale-90 transition-transform"
                       title="Discharge Bed"
                     >
-                      <Minus className="w-3.5 h-3.5" />
+                      <Minus className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleAdjust(ward.id, 1)}
                       disabled={ward.occupied >= ward.total}
-                      className="p-2 rounded-xl bg-[#E06D53] hover:bg-[#D25C42] text-white disabled:opacity-30 shadow-terracotta cursor-pointer active:scale-90 transition-transform"
+                      className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#E06D53] hover:bg-[#D25C42] text-white disabled:opacity-30 shadow-terracotta cursor-pointer active:scale-90 transition-transform"
                       title="Admit to Bed"
                     >
-                      <Plus className="w-3.5 h-3.5" />
+                      <Plus className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
@@ -209,20 +209,20 @@ export default function BedsPage() {
           {filteredWards.map((ward) => (
             <div
               key={ward.id}
-              className="p-6 rounded-3xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-4"
+              className="p-4 sm:p-6 rounded-3xl bg-white border border-[#EFE5DC] shadow-warm-sm flex flex-col gap-4"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                <div className="flex items-center gap-2.5">
                   <h3 className="text-base font-bold text-[#2C1810]">{ward.wardName}</h3>
-                  <span className="text-xs font-mono text-[#7A6258]">{ward.category}</span>
+                  <span className="text-xs font-mono text-[#7A6258] px-2 py-0.5 rounded-full bg-[#FAF6F2] border border-[#EFE5DC]">{ward.category}</span>
                 </div>
                 <span className="text-xs font-mono font-bold text-[#E06D53]">
                   {ward.occupied} / {ward.total} Occupied ({ward.percentage}%)
                 </span>
               </div>
 
-              {/* Grid of Bed Tiles */}
-              <div className="grid grid-cols-5 sm:grid-cols-10 gap-2 pt-2">
+              {/* Grid of Bed Tiles: 4 cols on mobile for tactile min-44px targets */}
+              <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2.5 pt-2">
                 {Array.from({ length: ward.total }).map((_, idx) => {
                   const isOccupied = idx < ward.occupied;
                   const isReserved = !isOccupied && idx < ward.occupied + ward.reserved;
@@ -230,7 +230,7 @@ export default function BedsPage() {
                     <div
                       key={idx}
                       onClick={() => handleAdjust(ward.id, isOccupied ? -1 : 1)}
-                      className={`p-2 rounded-xl border flex flex-col items-center justify-center gap-1 cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95 ${
+                      className={`min-h-[52px] p-2 rounded-xl border flex flex-col items-center justify-center gap-1 cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95 ${
                         isOccupied
                           ? 'bg-[#FDEEE9] border-[#F7D5CA] text-[#E06D53]'
                           : isReserved

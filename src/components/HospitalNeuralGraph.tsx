@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import {
@@ -104,66 +104,66 @@ export function HospitalNeuralGraph() {
           {/* Node 1: Emergency (Top Left) */}
           <button
             onClick={() => setActiveNode('er')}
-            className={`absolute top-4 left-4 sm:top-8 sm:left-8 p-3 rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-2 hover-lift ${
+            className={`absolute top-2 left-2 sm:top-8 sm:left-8 p-2 sm:p-3 rounded-xl sm:rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-1.5 sm:gap-2 hover-lift ${
               activeNode === 'er'
                 ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105 animate-glow'
                 : 'bg-white text-[#2C1810] border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm'
             }`}
           >
-            <Activity className="w-4 h-4 animate-pulse" />
-            <span className="text-xs font-bold">Emergency (ER)</span>
+            <Activity className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-pulse" />
+            <span className="text-[11px] sm:text-xs font-bold">Emergency <span className="hidden sm:inline">(ER)</span></span>
           </button>
 
           {/* Node 2: ICU & Cardio (Top Right) */}
           <button
             onClick={() => setActiveNode('icu')}
-            className={`absolute top-4 right-4 sm:top-8 sm:right-8 p-3 rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-2 hover-lift ${
+            className={`absolute top-2 right-2 sm:top-8 sm:right-8 p-2 sm:p-3 rounded-xl sm:rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-1.5 sm:gap-2 hover-lift ${
               activeNode === 'icu'
                 ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105 animate-glow'
                 : 'bg-white text-[#2C1810] border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm'
             }`}
           >
-            <BedDouble className="w-4 h-4" />
-            <span className="text-xs font-bold">ICU Telemetry</span>
+            <BedDouble className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="text-[11px] sm:text-xs font-bold">ICU <span className="hidden sm:inline">Telemetry</span></span>
           </button>
 
           {/* Node 3: Operating Theater (Bottom Right) */}
           <button
             onClick={() => setActiveNode('or')}
-            className={`absolute bottom-4 right-4 sm:bottom-8 sm:right-8 p-3 rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-2 hover-lift ${
+            className={`absolute bottom-2 right-2 sm:bottom-8 sm:right-8 p-2 sm:p-3 rounded-xl sm:rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-1.5 sm:gap-2 hover-lift ${
               activeNode === 'or'
                 ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105 animate-glow'
                 : 'bg-white text-[#2C1810] border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm'
             }`}
           >
-            <Scissors className="w-4 h-4" />
-            <span className="text-xs font-bold">Surgical Suites</span>
+            <Scissors className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="text-[11px] sm:text-xs font-bold">Surgical <span className="hidden sm:inline">Suites</span></span>
           </button>
 
           {/* Node 4: Pharmacy (Bottom Left) */}
           <button
             onClick={() => setActiveNode('pharmacy')}
-            className={`absolute bottom-4 left-4 sm:bottom-8 sm:left-8 p-3 rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-2 hover-lift ${
+            className={`absolute bottom-2 left-2 sm:bottom-8 sm:left-8 p-2 sm:p-3 rounded-xl sm:rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-1.5 sm:gap-2 hover-lift ${
               activeNode === 'pharmacy'
                 ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105 animate-glow'
                 : 'bg-white text-[#2C1810] border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm'
             }`}
           >
-            <Package className="w-4 h-4" />
-            <span className="text-xs font-bold">Pharmacy Supply</span>
+            <Package className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="text-[11px] sm:text-xs font-bold">Pharmacy <span className="hidden sm:inline">Supply</span></span>
           </button>
 
           {/* Node 5: Billing (Bottom Center) */}
           <button
             onClick={() => setActiveNode('billing')}
-            className={`absolute bottom-1 left-1/2 -translate-x-1/2 p-2.5 rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-1.5 hover-lift ${
+            className={`absolute bottom-1 left-1/2 -translate-x-1/2 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl border transition-all duration-300 cursor-pointer active:scale-95 flex items-center gap-1 sm:gap-1.5 hover-lift ${
               activeNode === 'billing'
                 ? 'bg-[#E06D53] text-white border-[#E06D53] shadow-terracotta scale-105 animate-glow'
                 : 'bg-white text-[#2C1810] border-[#EFE5DC] hover:border-[#E06D53]/40 shadow-warm-sm'
             }`}
           >
             <Receipt className="w-3.5 h-3.5" />
-            <span className="text-xs font-bold">Revenue Cycle</span>
+            <span className="text-[11px] sm:text-xs font-bold">Revenue <span className="hidden sm:inline">Cycle</span></span>
           </button>
         </div>
 

@@ -48,7 +48,7 @@ export function BookDemoModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-lg bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl p-6 sm:p-8 shadow-warm-lg flex flex-col gap-6 animate-in zoom-in-95 duration-200">
+      <div className="w-full max-w-lg bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl p-6 sm:p-8 shadow-warm-lg flex flex-col gap-6 animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between pb-4 border-b border-[#EFE5DC]">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
@@ -382,7 +382,7 @@ export function NewPatientModal({ isOpen, onClose }: { isOpen: boolean; onClose:
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-lg bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl p-6 sm:p-8 shadow-warm-lg flex flex-col gap-6 animate-in zoom-in-95 duration-200">
+      <div className="w-full max-w-lg bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl p-6 sm:p-8 shadow-warm-lg flex flex-col gap-6 animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between pb-4 border-b border-[#EFE5DC]">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">
@@ -540,7 +540,7 @@ export function NewAppointmentModal({ isOpen, onClose }: { isOpen: boolean; onCl
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-lg bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl p-6 sm:p-8 shadow-warm-lg flex flex-col gap-6 animate-in zoom-in-95 duration-200">
+      <div className="w-full max-w-lg bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl p-6 sm:p-8 shadow-warm-lg flex flex-col gap-6 animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between pb-4 border-b border-[#EFE5DC]">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-[#FDEEE9] flex items-center justify-center text-[#E06D53]">

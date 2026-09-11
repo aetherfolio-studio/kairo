@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
@@ -171,8 +171,8 @@ export function CommandPalette() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl shadow-warm-lg overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-8 sm:pt-20 p-3 sm:p-4 bg-[#2C1810]/50 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full max-w-2xl max-h-[88vh] bg-[#FFFDFC] border border-[#EFE5DC] rounded-3xl shadow-warm-lg overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
         {/* Search input header */}
         <div className="p-4 border-b border-[#EFE5DC] flex items-center gap-3">
           <Search className="w-5 h-5 text-[#E06D53] shrink-0" />

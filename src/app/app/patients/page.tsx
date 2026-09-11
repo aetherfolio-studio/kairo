@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { useHospitalStore } from '@/lib/store';
@@ -121,9 +121,99 @@ export default function PatientsPage() {
         </div>
       </div>
 
-      {/* Patient Records Table */}
+      {/* Patient Records Display: Mobile Cards + Desktop Table */}
       <div className="rounded-3xl bg-white border border-[#EFE5DC] shadow-warm-sm overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* VIEW 1: Mobile Card List (< md) */}
+        <div className="block md:hidden divide-y divide-[#EFE5DC]/80">
+          {filteredPatients.length === 0 ? (
+            <div className="p-8 text-center text-xs text-[#A59288]">
+              No patient records found matching your filters.
+            </div>
+          ) : (
+            filteredPatients.map((patient) => (
+              <div
+                key={patient.id}
+                onClick={() => setSelectedPatient(patient)}
+                className="p-4 flex flex-col gap-3 hover:bg-[#FAF6F2] active:bg-[#F6EFE9] transition-colors cursor-pointer"
+              >
+                {/* Top Row: ID + Status */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-[#E06D53]">
+                    <button
+                      onClick={(e) => handleCopyId(e, patient.patientId)}
+                      className="inline-flex items-center gap-1 hover:underline cursor-pointer"
+                      title="Copy Patient ID"
+                    >
+                      <span>{patient.patientId}</span>
+                      {copiedId === patient.patientId ? (
+                        <Check className="w-3 h-3 text-emerald-600" />
+                      ) : (
+                        <Copy className="w-3 h-3 text-[#A59288]" />
+                      )}
+                    </button>
+                  </div>
+
+                  <span
+                    className={`px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold border ${
+                      patient.status === 'Admitted'
+                        ? 'bg-[#E8F8F0] text-[#065F46] border-[#A7F3D0]'
+                        : patient.status === 'In Surgery'
+                        ? 'bg-[#FEF2F2] text-[#991B1B] border-[#FEE2E2]'
+                        : patient.status === 'Discharged'
+                        ? 'bg-[#F3F4F6] text-[#4B5563] border-[#E5E7EB]'
+                        : 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A]'
+                    }`}
+                  >
+                    {patient.status}
+                  </span>
+                </div>
+
+                {/* Patient Name & Demographics */}
+                <div className="flex flex-col gap-0.5">
+                  <h3 className="text-base font-bold text-[#2C1810]">
+                    {patient.name}
+                  </h3>
+                  <div className="flex items-center gap-2 text-xs text-[#7A6258]">
+                    <span>{patient.age} yrs • {patient.gender}</span>
+                    <span>•</span>
+                    <span className="font-mono font-semibold text-[#E06D53]">Blood: {patient.bloodGroup}</span>
+                  </div>
+                </div>
+
+                {/* Department & Doctor */}
+                <div className="flex items-center justify-between text-xs pt-1 border-t border-[#EFE5DC]/60">
+                  <span className="font-medium text-[#2C1810]">{patient.department}</span>
+                  <span className="text-[#7A6258]">{patient.assignedDoctor}</span>
+                </div>
+
+                {/* Vitals & Bed */}
+                <div className="flex items-center justify-between bg-[#FAF6F2] p-2.5 rounded-xl border border-[#EFE5DC] text-xs font-mono">
+                  <div className="flex items-center gap-1.5 text-[#2C1810]">
+                    <Activity className="w-3.5 h-3.5 text-[#E06D53]" />
+                    <span className="font-bold">{patient.vitals.heartRate}</span>
+                    <span className="text-[#A59288]">•</span>
+                    <span>{patient.vitals.bloodPressure}</span>
+                  </div>
+
+                  <span className="text-[#7A6258]">
+                    {patient.room ? `Room ${patient.room}` : 'Outpatient'}
+                  </span>
+                </div>
+
+                {/* Action Trigger */}
+                <div className="flex items-center justify-end text-xs font-semibold text-[#E06D53] pt-0.5">
+                  <span className="flex items-center gap-1">
+                    <span>View Medical Chart</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* VIEW 2: Desktop Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
               <tr className="border-b border-[#EFE5DC] bg-[#FAF6F2] text-[#7A6258] font-mono text-[11px] uppercase">

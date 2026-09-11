@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { useHospitalStore } from '@/lib/store';
@@ -162,7 +162,7 @@ export function CrisisSimulationSandbox() {
 
               <button
                 onClick={handleReset}
-                className="px-4 py-2 bg-white hover:bg-[#FAF6F2] text-[#2C1810] border border-[#EFE5DC] rounded-xl text-xs font-semibold shadow-warm-sm transition-all cursor-pointer flex items-center gap-1.5 self-start sm:self-auto"
+                className="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-white hover:bg-[#FAF6F2] text-[#2C1810] border border-[#EFE5DC] rounded-xl text-xs font-semibold shadow-warm-sm transition-all cursor-pointer flex items-center justify-center gap-1.5 self-start sm:self-auto"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Reset Sandbox</span>

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { useHospitalStore } from '@/lib/store';
@@ -133,11 +133,11 @@ export function SurgicalOrchestrator() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
             {emergencyOverride ? (
               <button
                 onClick={handleReset}
-                className="px-4 py-2 bg-white hover:bg-[#FAF6F2] text-[#2C1810] border border-[#EFE5DC] text-xs font-semibold rounded-xl transition-all shadow-warm-sm flex items-center gap-1.5 cursor-pointer active:scale-95"
+                className="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-white hover:bg-[#FAF6F2] text-[#2C1810] border border-[#EFE5DC] text-xs font-semibold rounded-xl transition-all shadow-warm-sm flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Reset Schedule Baseline</span>
@@ -145,7 +145,7 @@ export function SurgicalOrchestrator() {
             ) : (
               <button
                 onClick={handleTriggerEmergency}
-                className="px-4 py-2 bg-[#EF4444] hover:bg-[#DC2626] text-white text-xs font-bold font-mono rounded-xl transition-all shadow-warm-md flex items-center gap-1.5 cursor-pointer active:scale-95 animate-pulse"
+                className="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-[#EF4444] hover:bg-[#DC2626] text-white text-xs font-bold font-mono rounded-xl transition-all shadow-warm-md flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 animate-pulse"
               >
                 <Zap className="w-3.5 h-3.5" />
                 <span>Simulate Emergency Trauma Override</span>

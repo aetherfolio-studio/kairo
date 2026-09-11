@@ -1,8 +1,9 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { AppSidebar } from '@/components/AppSidebar';
 import { AppHeader } from '@/components/AppHeader';
+import { AppBottomNav } from '@/components/AppBottomNav';
 import { NewPatientModal, NewAppointmentModal } from '@/components/Modals';
 import { useHospitalStore } from '@/lib/store';
 
@@ -32,10 +33,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           onOpenNewAppointment={() => setIsNewAppointmentOpen(true)}
         />
 
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#FAF6F2]">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 bg-[#FAF6F2]">
           <div className="max-w-7xl mx-auto">{children}</div>
         </main>
       </div>
+
+      {/* Mobile Bottom Navigation Bar (Fixed for thumb reachability) */}
+      <AppBottomNav
+        onOpenMobileMenu={() => setMobileSidebarOpen(true)}
+        onOpenNewPatient={() => setIsNewPatientOpen(true)}
+      />
 
       {/* Hospital Modals */}
       <NewPatientModal

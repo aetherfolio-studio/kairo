@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -98,8 +98,8 @@ export function HeroDashboardPreview() {
 
       {/* Main Dashboard Layout Split */}
       <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[580px]">
-        {/* Left App Sidebar */}
-        <div className="lg:col-span-3 border-r border-[#EFE5DC] bg-[#FFFDFC] p-4 flex flex-col justify-between select-none">
+        {/* Left App Sidebar (Desktop Only: lg:flex) */}
+        <div className="hidden lg:flex lg:col-span-3 border-r border-[#EFE5DC] bg-[#FFFDFC] p-4 flex-col justify-between select-none">
           <div className="flex flex-col gap-5">
             <div className="px-2 pt-1 flex items-center justify-between">
               <Logo size="sm" showWordmark={true} href="/app" />
@@ -184,10 +184,51 @@ export function HeroDashboardPreview() {
         </div>
 
         {/* Right Dashboard Workspace */}
-        <div className="lg:col-span-9 bg-[#FAF6F2] p-5 sm:p-6 flex flex-col gap-6">
+        <div className="lg:col-span-9 bg-[#FAF6F2] p-4 sm:p-6 flex flex-col gap-5 sm:gap-6">
+          {/* Mobile Module Navigation Pill Strip (< lg) */}
+          <div className="flex lg:hidden items-center justify-between gap-2 border-b border-[#EFE5DC] pb-3 overflow-x-auto">
+            <div className="flex items-center gap-1.5 shrink-0">
+              {[
+                { name: 'Overview' as const, icon: LayoutDashboard, count: 'Live' },
+                { name: 'Appointments' as const, icon: Calendar, count: `${appointments.length}` },
+                { name: 'Beds' as const, icon: BedDouble, count: `${overallBedOccupancyPercent}%` },
+                { name: 'AI' as const, icon: Sparkles, count: 'Smart' },
+              ].map((item) => {
+                const Icon = item.icon;
+                const isActive = activeTab === item.name;
+                return (
+                  <button
+                    key={item.name}
+                    onClick={() => setActiveTab(item.name)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all active:scale-95 cursor-pointer ${
+                      isActive
+                        ? 'bg-[#E06D53] text-white shadow-warm-sm'
+                        : 'bg-white text-[#7A6258] border border-[#EFE5DC]'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span>{item.name}</span>
+                    <span className={`text-[9px] font-mono px-1 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-[#FAF6F2] text-[#7A6258]'}`}>
+                      {item.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Mobile Quick Action Pill */}
+            <button
+              onClick={() => setIsNewPatientOpen(true)}
+              className="px-2.5 py-1.5 rounded-xl bg-white text-[#E06D53] border border-[#F7D5CA] text-xs font-semibold shrink-0 shadow-warm-sm flex items-center gap-1 cursor-pointer active:scale-95"
+            >
+              <Plus className="w-3 h-3" />
+              <span>Admit</span>
+            </button>
+          </div>
+
           {/* Header Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex flex-col gap-1">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+            <div className="flex flex-col gap-0.5 sm:gap-1">
               <h2 className="text-xl sm:text-2xl font-bold text-[#2C1810] flex items-center gap-2">
                 <span>Good morning, Dr. Sarah</span>
                 <span className="text-xl animate-float inline-block">👋</span>
