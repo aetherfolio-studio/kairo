@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { useHospitalStore } from '@/lib/store';
@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 
 export default function DepartmentsPage() {
-  const { departments } = useHospitalStore();
+  const { departments, addToast } = useHospitalStore();
   const [categoryFilter, setCategoryFilter] = useState<'All' | 'Critical Care' | 'Specialty' | 'General' | 'Diagnostic'>('All');
   const [search, setSearch] = useState('');
 
@@ -79,10 +79,20 @@ export default function DepartmentsPage() {
                   {dept.code}
                 </span>
                 {dept.activeAlerts > 0 ? (
-                  <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#FEF2F2] text-[#EF4444] border border-[#FEE2E2] flex items-center gap-1">
+                  <button
+                    onClick={() => {
+                      addToast({
+                        title: `⚠️ ${dept.name} Active Alert`,
+                        description: `Capacity threshold alert: Clinical protocol engaged. Swing beds standing by.`,
+                        type: 'warning'
+                      });
+                    }}
+                    className="min-h-[32px] text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-[#FEF2F2] text-[#EF4444] border border-[#FEE2E2] flex items-center gap-1.5 cursor-pointer active:scale-95 transition-transform"
+                    title="Inspect active alert"
+                  >
                     <AlertTriangle className="w-3 h-3" />
                     <span>{dept.activeAlerts} Active Alert</span>
-                  </span>
+                  </button>
                 ) : (
                   <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#E8F8F0] text-[#065F46] border border-[#A7F3D0]">
                     Status: Optimal

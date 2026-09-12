@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { MessageSquare, CheckCircle2, Clock, Sparkles, Building2, User, Send } from 'lucide-react';
@@ -51,7 +51,7 @@ export default function MessagesPage() {
 
         <button
           onClick={markAllRead}
-          className="px-4 py-2 bg-white hover:bg-[#FAF6F2] text-[#2C1810] border border-[#EFE5DC] text-xs font-semibold rounded-xl shadow-warm-sm flex items-center gap-1.5 transition-all self-start sm:self-auto cursor-pointer"
+          className="min-h-[40px] px-4 py-2 bg-white hover:bg-[#FAF6F2] text-[#2C1810] border border-[#EFE5DC] text-xs font-semibold rounded-xl shadow-warm-sm flex items-center gap-1.5 transition-all self-start sm:self-auto cursor-pointer active:scale-95"
         >
           <CheckCircle2 className="w-3.5 h-3.5 text-[#E06D53]" />
           <span>Mark all as read</span>
@@ -96,6 +96,35 @@ export default function MessagesPage() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Quick Dispatch Composer */}
+      <div className="p-3 sm:p-4 rounded-3xl bg-white border border-[#EFE5DC] shadow-warm-sm flex items-center gap-2 sm:gap-3">
+        <input
+          type="text"
+          placeholder="Dispatch urgent clinical notice or department page..."
+          className="flex-1 bg-[#FAF6F2] border border-[#EFE5DC] rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-xs text-[#2C1810] placeholder-[#A59288] focus:outline-none focus:border-[#E06D53]"
+        />
+        <button
+          onClick={() => {
+            setMessages((prev) => [
+              {
+                id: `msg-${Date.now()}`,
+                sender: 'Staff On-Call Dispatch',
+                subject: 'Urgent Clinical Notification',
+                preview: 'Clinical team paged to station.',
+                time: 'Just now',
+                unread: true,
+                department: 'Clinical'
+              },
+              ...prev
+            ]);
+          }}
+          className="min-h-[40px] px-4 py-2 bg-[#E06D53] hover:bg-[#D25C42] text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all shadow-terracotta cursor-pointer active:scale-95 shrink-0"
+        >
+          <Send className="w-3.5 h-3.5" />
+          <span className="hidden xs:inline">Dispatch</span>
+        </button>
       </div>
     </div>
   );

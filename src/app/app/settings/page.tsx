@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { Settings, Shield, User, Building2, Bell, Key, CheckCircle2, BedDouble } from 'lucide-react';
@@ -24,12 +24,12 @@ export default function SettingsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 pb-2 border-b border-[#EFE5DC]">
+      <div className="flex items-center gap-2 pb-2 border-b border-[#EFE5DC] overflow-x-auto w-full">
         {(['profile', 'facility', 'notifications', 'security'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold capitalize transition-all cursor-pointer ${
+            className={`min-h-[40px] px-4 py-2 rounded-xl text-xs font-semibold capitalize whitespace-nowrap transition-all cursor-pointer ${
               activeTab === tab
                 ? 'bg-[#E06D53] text-white shadow-warm-sm'
                 : 'text-[#7A6258] hover:text-[#2C1810] bg-white border border-[#EFE5DC]'

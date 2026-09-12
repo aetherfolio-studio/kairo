@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { useHospitalStore } from '@/lib/store';
@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 export default function StaffPage() {
-  const { staff, updateStaffStatus } = useHospitalStore();
+  const { staff, updateStaffStatus, addToast } = useHospitalStore();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'All' | 'On Duty' | 'In Surgery' | 'On Call' | 'Off Duty'>('All');
 
@@ -83,20 +83,24 @@ export default function StaffPage() {
                 <img
                   src={member.avatar}
                   alt={member.name}
-                  className="w-14 h-14 rounded-2xl object-cover border-2 border-[#EFE5DC]"
+                  className="w-14 h-14 rounded-2xl object-cover border-2 border-[#EFE5DC] bg-[#FAF6F2]"
                 />
                 <button
-                  onClick={() =>
-                    updateStaffStatus(
-                      member.id,
+                  onClick={() => {
+                    const nextStatus =
                       member.status === 'On Duty'
                         ? 'In Surgery'
                         : member.status === 'In Surgery'
                         ? 'On Call'
-                        : 'On Duty'
-                    )
-                  }
-                  className={`px-3 py-1 rounded-full font-mono text-[10px] font-bold border transition-all cursor-pointer ${
+                        : 'On Duty';
+                    updateStaffStatus(member.id, nextStatus);
+                    addToast({
+                      title: `${member.name}`,
+                      description: `Status updated to ${nextStatus}`,
+                      type: 'info'
+                    });
+                  }}
+                  className={`min-h-[36px] px-3.5 py-1.5 rounded-full font-mono text-[10px] font-bold border transition-all cursor-pointer active:scale-95 ${
                     member.status === 'On Duty'
                       ? 'bg-[#E8F8F0] text-[#065F46] border-[#A7F3D0]'
                       : member.status === 'In Surgery'
@@ -122,8 +126,24 @@ export default function StaffPage() {
             </div>
 
             <div className="flex items-center justify-between pt-3 border-t border-[#EFE5DC] text-xs">
-              <span className="font-mono text-[#7A6258] text-[11px]">{member.phone}</span>
-              <button className="px-3 py-1 bg-[#FAF6F2] hover:bg-[#F6EFE9] text-[#2C1810] font-semibold rounded-lg border border-[#EFE5DC] transition-colors cursor-pointer">
+              <a
+                href={`tel:${member.phone.replace(/[^0-9+]/g, '')}`}
+                className="font-mono text-[#7A6258] hover:text-[#E06D53] text-[11px] flex items-center gap-1.5 transition-colors cursor-pointer py-1"
+                title="Call physician"
+              >
+                <Phone className="w-3.5 h-3.5 text-[#E06D53]" />
+                <span>{member.phone}</span>
+              </a>
+              <button
+                onClick={() => {
+                  addToast({
+                    title: `Emergency Page Dispatched`,
+                    description: `Paging ${member.name} to ${member.room}...`,
+                    type: 'warning'
+                  });
+                }}
+                className="min-h-[36px] px-3.5 py-1.5 bg-[#FAF6F2] hover:bg-[#E06D53] hover:text-white text-[#2C1810] font-semibold rounded-xl border border-[#EFE5DC] transition-all cursor-pointer active:scale-95 text-xs"
+              >
                 Page Doctor
               </button>
             </div>

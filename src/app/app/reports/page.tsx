@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { useHospitalStore } from '@/lib/store';
@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function ReportsPage() {
-  const { overallBedOccupancyPercent } = useHospitalStore();
+  const { overallBedOccupancyPercent, addToast } = useHospitalStore();
   const [timeRange, setTimeRange] = useState<'This Week' | 'This Month' | 'Quarter'>('This Week');
 
   return (
@@ -28,13 +28,13 @@ export default function ReportsPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-3">
           <div className="flex items-center p-1 bg-white border border-[#EFE5DC] rounded-xl shadow-warm-sm">
             {(['This Week', 'This Month', 'Quarter'] as const).map((r) => (
               <button
                 key={r}
                 onClick={() => setTimeRange(r)}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                className={`min-h-[36px] px-3.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   timeRange === r ? 'bg-[#E06D53] text-white shadow-warm-sm' : 'text-[#7A6258] hover:text-[#2C1810]'
                 }`}
               >
@@ -43,7 +43,16 @@ export default function ReportsPage() {
             ))}
           </div>
 
-          <button className="px-3.5 py-2 bg-white hover:bg-[#FAF6F2] text-[#2C1810] border border-[#EFE5DC] text-xs font-semibold rounded-xl shadow-warm-sm flex items-center gap-1.5 cursor-pointer">
+          <button
+            onClick={() => {
+              addToast({
+                title: 'Analytics Export Generated',
+                description: `Exported ${timeRange} clinical KPI dataset to CSV.`,
+                type: 'success'
+              });
+            }}
+            className="min-h-[40px] px-4 py-2 bg-white hover:bg-[#FAF6F2] text-[#2C1810] border border-[#EFE5DC] text-xs font-semibold rounded-xl shadow-warm-sm flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all"
+          >
             <Download className="w-3.5 h-3.5 text-[#E06D53]" />
             <span>Export CSV</span>
           </button>
